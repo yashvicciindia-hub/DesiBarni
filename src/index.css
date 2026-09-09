@@ -62,6 +62,17 @@ button {
     outline-offset: 4px;
 }
 
+.desktop-nav a.active-link {
+    color: #d99124;
+    border-bottom: 2px solid #d99124;
+    padding-bottom: 4px;
+}
+
+.mobile-menu a.active-link {
+    color: #d99124;
+    font-weight: 600;
+}
+
 .serif {
     font-family: 'Playfair Display', serif;
 }

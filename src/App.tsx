@@ -1,105 +1,85 @@
-import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from 'react';
-import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronLeft, ChevronRight, CircleUserRound, Instagram, Menu, Minus, Moon, Plus, RefreshCw, Search, ShoppingBag, Sun, X, Youtube } from 'lucide-react';
-import { CartProvider, useCart } from '@/context/CartContext';
-import { getProduct, products, type Product } from '@/data/products';
-import MarketAccess from '@/components/MarketAccess';
+import { useEffect, useState } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Check } from 'lucide-react';
+import { CartProvider } from '@/context/CartContext';
+import type { Product } from '@/data/products';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import CartDrawer from '@/components/CartDrawer';
+import QuickView from '@/components/QuickView';
+import ScrollToTop from '@/components/ScrollToTop';
+
+import HomePage from '@/pages/HomePage';
+import PicklesPage from '@/pages/PicklesPage';
+import ProductDetailPage from '@/pages/ProductDetailPage';
+import RegionsPage from '@/pages/RegionsPage';
+import JourneyPage from '@/pages/JourneyPage';
+import MarketAccessPage from '@/pages/MarketAccessPage';
+import CheckoutPage from '@/pages/CheckoutPage';
 
 type Theme = 'light' | 'dark';
-type Region = { name: string; detail: string; pickles: string; tone: string };
-const regions: Region[] = [
-  { name: 'NORTH', detail: 'Bold, oil-rich and familiar.', pickles: 'Punjabi Mango · Mixed Vegetable', tone: '#b83a2f' },
-  { name: 'WEST', detail: 'Sweet-spicy with urban appeal.', pickles: 'Gujarati Chundo · Maharashtrian Pickles', tone: '#d99124' },
-  { name: 'SOUTH', detail: 'Intensely flavoured and fragrant.', pickles: 'Andhra Avakaya · Kerala Pickles · Appemidi', tone: '#66752a' },
-  { name: 'EAST', detail: 'Distinctive regional mango and chilli traditions.', pickles: 'Mango · Chilli Pickles', tone: '#a86b35' },
-  { name: 'NORTHEAST', detail: 'Unique, bright and specialty-friendly.', pickles: 'Bamboo Shoot · Regional Chilli Pickles', tone: '#8b6d4b' },
-];
-const stages = ['PREPARE', 'PACKAGE', 'CONNECT', 'POSITION', 'REPEAT', 'SCALE'];
-const journey = ['My 7-Product Pilot', 'Document Learnings', 'Identify Existing Pickle Businesses', 'Assess Market Readiness', 'Connect with Buyers', 'Build Pan-India Market-Access Network'];
-const pilotTopics = ['Product formulation & costing', 'Packaging design & supplier evaluation', 'Shelf life & food safety testing', 'Pricing strategy & margin analysis', 'Customer response & feedback loops', 'Retail acceptance & buyer requirements'];
 
-function ProductArt({ product, large = false }: { product: Product; large?: boolean }) {
-  return <div className={`product-art ${large ? 'product-art-large' : ''}`} style={{ '--product': product.color, '--accent': product.accent } as CSSProperties}>
-    <span className="art-stamp">DESI<br />BARNI</span><div className="art-lid" /><div className="art-jar"><div className="art-label"><small>REGIONAL TASTE</small><strong>{product.shortName}</strong><span>desi barni</span></div><i className="art-ingredient one" /><i className="art-ingredient two" /><i className="art-ingredient three" /></div><span className="art-weight">{product.weight}</span>
-  </div>;
-}
+function AppContent() {
+  const [theme, setTheme] = useState<Theme>(
+    () =>
+      (localStorage.getItem('desi-barni-theme') as Theme) ||
+      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+  );
+  const [cartOpen, setCartOpen] = useState(false);
+  const [quick, setQuick] = useState<Product | null>(null);
+  const [toast, setToast] = useState('');
 
-function Logo({ compact = false }: { compact?: boolean }) {
-  return <a href="/#top" className={`brand-mark ${compact ? 'compact' : ''}`} aria-label="Desi Barni home"><img src="/images/logo/Desi_barni.jpeg" alt="Desi Barni" /></a>;
-}
+  const changeTheme = () => setTheme((current) => (current === 'dark' ? 'light' : 'dark'));
 
-function Navbar({ theme, onTheme, onCart, marketAccess }: { theme: Theme; onTheme: () => void; onCart: () => void; marketAccess: boolean }) {
-  const [scrolled, setScrolled] = useState(false); const [menu, setMenu] = useState(false); const { itemCount } = useCart();
-  useEffect(() => { const fn = () => setScrolled(window.scrollY > 24); window.addEventListener('scroll', fn); return () => window.removeEventListener('scroll', fn); }, []);
-  const links = [['Our Pickles', marketAccess ? '/#collection' : '#collection'], ['Market Access', marketAccess ? '/#market-access' : '#market-access'], ['Our Story', marketAccess ? '/#story' : '#story'], ['Regional Flavours', marketAccess ? '/#regions' : '#regions'], ['Our Journey', '#journey'], ['Contact', marketAccess ? '/#footer' : '#footer']];
-  return <header className={`navbar ${scrolled ? 'scrolled' : ''} ${menu ? 'menu-open' : ''}`}><div className="nav-inner"><Logo compact /><nav className="desktop-nav">{links.map(([label, href]) => <a key={label} href={href}>{label}</a>)}</nav><div className="nav-actions"><button className="icon-btn desktop-only" aria-label="Search" onClick={() => document.getElementById('collection')?.scrollIntoView()}><Search size={18} /></button><button className="icon-btn desktop-only" onClick={onTheme} aria-label="Toggle theme">{theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}</button><button className="cart-trigger" onClick={onCart} aria-label={`Open cart, ${itemCount} items`}><ShoppingBag size={19} /><span>{itemCount}</span></button><button className="icon-btn mobile-only" onClick={() => setMenu(!menu)} aria-label="Toggle menu">{menu ? <X size={21} /> : <Menu size={21} />}</button></div></div>{menu && <div className="mobile-menu">{links.map(([label, href]) => <a key={label} href={href} onClick={() => setMenu(false)}>{label}<ArrowRight size={16} /></a>)}<button onClick={onTheme}>{theme === 'dark' ? 'Switch to light' : 'Switch to dark'} <Sun size={16} /></button></div>}</header>;
-}
-
-function Button({ children, onClick, secondary = false }: { children: ReactNode; onClick?: () => void; secondary?: boolean }) { return <button className={`button ${secondary ? 'button-secondary' : ''}`} onClick={onClick}>{children}<ArrowRight size={16} /></button>; }
-
-function ProductCard({ product, onQuickView, onAdded }: { product: Product; onQuickView: (product: Product) => void; onAdded: (product: Product) => void }) {
-  const { addItem } = useCart(); const [liked, setLiked] = useState(false); const [showAlternate, setShowAlternate] = useState(false);
-  return <article className="product-card"><div className={`product-visual ${showAlternate ? 'show-alternate' : ''}`} onMouseEnter={() => setShowAlternate(true)} onMouseLeave={() => setShowAlternate(false)} onClick={() => onQuickView(product)}><div className="product-art product-art-primary"><ProductArt product={product} /></div><div className="product-art product-art-alt"><ProductArt product={{ ...product, color: product.accent, accent: product.color }} /></div><button className={`wishlist ${liked ? 'liked' : ''}`} aria-label="Add to wishlist" onClick={(event) => { event.stopPropagation(); setLiked(!liked); }}>{liked ? '♥' : '♡'}</button><button className="image-toggle" aria-label="Show alternate product image" onClick={(event) => { event.stopPropagation(); setShowAlternate(!showAlternate); }}><RefreshCw size={13} /></button><span className="view-detail">VIEW DETAILS <ArrowRight size={13} /></span></div><div className="product-info"><div><p className="eyebrow">{product.region} · {product.weight}</p><h3>{product.name}</h3></div><span className="price">₹{product.price}</span></div><p className="product-description">{product.description}</p><div className="product-bottom"><span className="rating">★★★★★ <small>Coming soon</small></span><button className="add-button" onClick={() => { addItem(product); onAdded(product); }}><Plus size={15} /> Add to Barni</button></div></article>;
-}
-
-function CartDrawer({ open, onClose, onCheckout }: { open: boolean; onClose: () => void; onCheckout: () => void }) {
-  const { items, subtotal, updateQuantity, removeItem } = useCart();
-  return open ? <div className="overlay" role="dialog" aria-modal="true"><button className="overlay-close" aria-label="Close cart" onClick={onClose} /><aside className="cart-drawer"><div className="drawer-head"><div><p className="eyebrow">YOUR BARni</p><h2>Your Barni</h2></div><button className="close-btn" onClick={onClose} aria-label="Close cart"><X /></button></div>{items.length === 0 ? <div className="empty-cart"><div className="empty-icon"><ShoppingBag /></div><h3>Your Barni is empty.</h3><p>Begin with a flavour that feels like home.</p><button className="text-link" onClick={onClose}>Explore pickles <ArrowRight size={15} /></button></div> : <><div className="cart-items">{items.map(({ product, quantity }) => <div className="cart-item" key={product.id}><ProductArt product={product} /><div className="cart-item-detail"><div className="cart-item-title"><h4>{product.name}</h4><button onClick={() => removeItem(product.id)} aria-label={`Remove ${product.name}`}><X size={14} /></button></div><span>₹{product.price}</span><div className="quantity"><button onClick={() => updateQuantity(product.id, quantity - 1)} aria-label="Decrease quantity"><Minus size={13} /></button><b>{quantity}</b><button onClick={() => updateQuantity(product.id, quantity + 1)} aria-label="Increase quantity"><Plus size={13} /></button></div></div></div>)}</div><div className="drawer-summary"><div><span>Subtotal</span><strong>₹{subtotal}</strong></div><div><span>Shipping</span><span>Calculated at checkout</span></div><div className="total"><span>Total</span><strong>₹{subtotal}</strong></div><Button onClick={onCheckout}>Checkout</Button><small>Demo checkout · payment integration ready to connect</small></div></>}</aside></div> : null;
-}
-
-function QuickView({ product, onClose, onAdded }: { product: Product | null; onClose: () => void; onAdded: (product: Product) => void }) {
-  const { addItem } = useCart(); const [quantity, setQuantity] = useState(1); const [alt, setAlt] = useState(false); if (!product) return null;
-  return <div className="overlay" role="dialog" aria-modal="true"><button className="overlay-close" onClick={onClose} aria-label="Close quick view" /><div className="quick-view"><button className="close-btn" onClick={onClose} aria-label="Close"><X /></button><div className="quick-art">{alt ? <ProductArt product={{ ...product, color: product.accent, accent: product.color }} large /> : <ProductArt product={product} large />}<button className="gallery-switch" onClick={() => setAlt(!alt)}>{alt ? <ChevronLeft /> : <ChevronRight />}</button></div><div className="quick-copy"><p className="eyebrow">{product.region} · {product.flavourProfile}</p><h2>{product.name}</h2><p>{product.description}</p><div className="detail-rule" /><p className="eyebrow">INGREDIENTS</p><p className="ingredients">{product.ingredients.join(' · ')}</p><div className="quick-buy"><strong>₹{product.price}</strong><div className="quantity"><button onClick={() => setQuantity(Math.max(1, quantity - 1))}><Minus size={13} /></button><b>{quantity}</b><button onClick={() => setQuantity(quantity + 1)}><Plus size={13} /></button></div></div><Button onClick={() => { for (let i = 0; i < quantity; i += 1) addItem(product); onAdded(product); onClose(); }}>Add to Barni</Button><button className="buy-now" onClick={() => { addItem(product); onClose(); }}>Buy now</button><a className="text-link" style={{ marginTop: 18 }} href={`#product/${product.slug}`} onClick={onClose}>View full details <ArrowRight size={15} /></a></div></div></div>;
-}
-
-function useReveal() {
   useEffect(() => {
-    const els = document.querySelectorAll('[data-reveal]');
-    const obs = new IntersectionObserver((entries) => { entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('revealed'); obs.unobserve(e.target); } }); }, { threshold: 0.12 });
-    els.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
-}
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem('desi-barni-theme', theme);
+  }, [theme]);
 
-function Home({ onQuickView, onAdded }: { onQuickView: (product: Product) => void; onAdded: (product: Product) => void }) {
-  const [region, setRegion] = useState(regions[0]); const [stage, setStage] = useState(0); const [query, setQuery] = useState('');
-  const featured = products.slice(0, 4); const filtered = useMemo(() => products.filter((product) => `${product.name} ${product.ingredients.join(' ')} ${product.flavourProfile}`.toLowerCase().includes(query.toLowerCase())), [query]);
-  useReveal();
-  return <main id="top">
-    <section className="hero hero-grid noise"><div className="hero-product reveal delay-2"><img src="/images/logo/header.png" alt="Desi Barni mango pickle with regional ingredients" className="hero-header-image" /></div><div className="hero-copy"><p className="eyebrow reveal">ONE COUNTRY · HUNDREDS OF REGIONAL TASTES</p><h1 className="serif reveal delay-1">From local taste<br /><em>to every table.</em></h1><p className="hero-lede reveal delay-2">India has hundreds of regional pickle traditions. Desi Barni brings those flavours closer to modern India.</p><div className="hero-actions reveal delay-3"><Button onClick={() => document.getElementById('collection')?.scrollIntoView()}>Explore the pickles</Button><a className="story-link" href="#story">Discover our story <ArrowDown size={15} /></a></div></div><span className="ingredient-float float-a">MANGO</span><span className="ingredient-float float-b">MIRCHI</span><span className="ingredient-float float-c">नमक</span><div className="hero-meta"><span>01 — 07</span><span>Small batches, big stories</span></div></section>
-    <section className="image-band"><img src="https://images.pexels.com/photos/7812134/pexels-photo-7812134.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Traditional Indian mango pickle in a rustic jar" loading="lazy" /><div className="image-band-overlay"><p data-reveal>Every jar carries <em>a story</em> from a kitchen you may never have visited.</p></div></section>
-    <section className="manifesto section-dark" data-reveal><div className="section-label"><span>01</span><span>THE IDEA</span></div><div className="manifesto-copy"><p className="eyebrow">A TASTE OF PLACE</p><h2 className="serif">One country.<br /><em>Hundreds of regional tastes.</em></h2><p>Every region has its own way of making a pickle. We are here to make those stories easier to discover, share and bring home.</p><a className="text-link" href="#regions">Explore regional flavours <ArrowRight size={15} /></a></div><div className="manifesto-mark"><span>देस</span><small>REGIONAL<br />FLAVOURS</small></div></section>
-    <section id="collection" className="section collection" data-reveal><div className="section-head"><div><p className="eyebrow">02 · THE COLLECTION</p><h2 className="serif">The Desi Barni<br /><em>collection.</em></h2></div><div className="collection-intro"><p>Seven flavours. Seven stories. One love for India's pickle traditions.</p><div className="search-box"><Search size={17} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search mango, chilli..." aria-label="Search pickles" /></div></div></div><div className="featured-grid">{(query ? filtered : featured).map((product) => <ProductCard key={product.id} product={product} onQuickView={onQuickView} onAdded={onAdded} />)}</div>{!query && <a className="center-link" href="#all-products">View all seven flavours <ArrowRight size={16} /></a>}</section>
-    <section id="story" className="story section" data-reveal>
-      <div className="story-image">
-        <div className="story-jar">
-           <img src="/images/logo/pickles.png" alt="Desi Barni pickles" />
-        <ProductArt product={products[3]} large />
+  const added = (product: Product) => {
+    setToast(`${product.shortName} added to your Barni`);
+    window.setTimeout(() => setToast(''), 2600);
+  };
+
+  return (
+    <div className={`${theme === 'dark' ? 'dark-page' : 'light-page'} app`}>
+      <ScrollToTop />
+      <Navbar theme={theme} onTheme={changeTheme} onCart={() => setCartOpen(true)} />
+
+      <Routes>
+        <Route path="/" element={<HomePage onQuickView={setQuick} onAdded={added} />} />
+        <Route path="/pickles" element={<PicklesPage onQuickView={setQuick} onAdded={added} />} />
+        <Route
+          path="/product/:slug"
+          element={<ProductDetailPage onAdded={added} onQuickView={setQuick} />}
+        />
+        <Route path="/regions" element={<RegionsPage onQuickView={setQuick} onAdded={added} />} />
+        <Route path="/journey" element={<JourneyPage />} />
+        <Route path="/market-access" element={<MarketAccessPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="*" element={<HomePage onQuickView={setQuick} onAdded={added} />} />
+      </Routes>
+
+      <Footer theme={theme} onTheme={changeTheme} />
+
+      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
+      <QuickView product={quick} onClose={() => setQuick(null)} onAdded={added} />
+
+      {toast && (
+        <div className="toast">
+          <Check size={16} /> {toast}
         </div>
-        <span className="vertical-note">MADE FOR MODERN TABLES</span>
-        </div><div className="story-copy"><p className="eyebrow">03 · OUR STORY</p><h2 className="serif">India has<br /><em>always had pickles.</em></h2><p className="lead">Every region has its own recipes, ingredients and traditions. Yet many of these flavours remain local.</p><p>Desi Barni is built around bringing regional pickle stories into a modern marketplace — with the care of a kitchen, and the clarity of a contemporary brand.</p><a className="text-link" href="#journey">Read our journey <ArrowRight size={15} /></a></div></section>
-    <section id="regions" className="regions section-dark" data-reveal><div className="section-head"><div><p className="eyebrow">04 · REGIONAL FLAVOURS</p><h2 className="serif">Taste the<br /><em>map of India.</em></h2></div><p className="regions-note">The best pickle is often the one that takes you somewhere.</p></div><div className="region-layout"><div className="india-shape"><div className="india-outline"><span>INDIA</span><i className="map-dot dot-1" /><i className="map-dot dot-2" /><i className="map-dot dot-3" /><i className="map-dot dot-4" /></div><span className="map-caption">A COUNTRY OF<br />MANY TABLES</span></div><div className="region-list">{regions.map((item) => <button key={item.name} className={`region-row ${region.name === item.name ? 'active' : ''}`} onClick={() => setRegion(item)}><span>{item.name}</span><strong>{item.detail}</strong><ArrowRight size={17} /></button>)}<div className="region-detail" style={{ borderColor: region.tone }}><p className="eyebrow">{region.name}</p><h3 className="serif">{region.pickles}</h3><p>{region.detail} Regional traditions, waiting to be discovered.</p></div></div></div></section>
-    <section className="ecosystem section" data-reveal><div className="section-head"><div><p className="eyebrow">05 · THE NETWORK</p><h2 className="serif">More than a pickle.<br /><em>A network of taste.</em></h2></div><p className="ecosystem-note">From home businesses and women entrepreneurs to retailers, restaurants and diaspora networks — regional taste has many hands behind it.</p></div><div className="network"><div className="network-core"><img src="/images/logo/Desi_barni.jpeg" alt="Desi Barni" /></div>{['PRODUCERS', 'HOME KITCHENS', 'RETAIL', 'D2C', 'RESTAURANTS', 'EXPORT'].map((node, index) => <div key={node} className={`network-node node-${index}`}><span>{node}</span></div>)}</div></section>
-    <section className="process section-dark" data-reveal><div className="section-label"><span>06</span><span>MARKET ACCESS</span></div><div className="section-head"><div><p className="eyebrow">THE WAY FORWARD</p><h2 className="serif">Prepare. Connect.<br /><em>Grow together.</em></h2></div><p className="process-note">A thoughtful path from regional product to a stronger market presence.</p></div><div className="stage-tabs">{stages.map((item, index) => <button key={item} className={stage === index ? 'active' : ''} onClick={() => setStage(index)}><span>0{index + 1}</span>{item}</button>)}</div><div className="stage-panel"><span className="stage-number">0{stage + 1}</span><div><h3 className="serif">{stages[stage]}</h3><p>{['Develop product and process with care.', 'Packaging, specifications and positioning for a modern shelf.', 'Connect with retail, institutional, e-commerce and export buyers.', 'Build a stronger regional product proposition.', 'Learn from customer response and feed it back into the work.', 'Build a scalable market-access network.'][stage]}</p></div><ArrowRight size={30} /></div></section>
-    <section id="journey" className="journey section" data-reveal><div className="section-head"><div><p className="eyebrow">07 · OUR JOURNEY</p><h2 className="serif">Starting small.<br /><em>Building for scale.</em></h2></div><p className="journey-note">A six-stage journey from a personal pilot toward a wider ecosystem initiative.</p></div><div className="journey-track">{journey.map((item, index) => <div className="journey-step" key={item}><span className="journey-dot">0{index + 1}</span><p>{item}</p></div>)}</div><div className="pilot-grid">{pilotTopics.map((topic, index) => <div className="pilot-item" key={topic}><span>0{index + 1}</span><p>{topic}</p><Check size={15} /></div>)}</div></section>
-    <section className="editorial section-dark" data-reveal><div className="editorial-copy"><p className="eyebrow">08 · THE TASTE</p><h2 className="serif">Seven flavours.<br /><em>Countless memories.</em></h2><p>Some tastes arrive with a little heat. Others arrive with a familiar kitchen, a summer afternoon, a table full of people.</p><a className="text-link" href="#collection">Meet the collection <ArrowRight size={15} /></a></div><div className="ingredient-grid">{products.map((product, index) => <div key={product.id} className={`ingredient-tile tile-${index}`} style={{ '--product': product.color } as CSSProperties}><span>{product.shortName}</span><ProductArt product={product} /></div>)}</div></section>
-    <section className="channels section" data-reveal><div className="section-head"><div><p className="eyebrow">09 · WHERE WE GO NEXT</p><h2 className="serif">From our barni<br /><em>to more tables.</em></h2></div><p className="channels-note">The next chapter is about making regional taste easier to find, wherever people gather around food.</p></div><div className="channel-grid">{[['RETAIL', 'Kirana and organised stores'], ['B2B', 'Hotels, restaurants and caterers'], ['E-COMMERCE', 'Marketplaces and D2C'], ['EXPORT', 'Importers and diaspora']].map(([title, copy], index) => <div className="channel-card" key={title}><span>0{index + 1}</span><h3 className="serif">{title}</h3><p>{copy}</p><ArrowUpRight /></div>)}</div></section>
-    <section className="final-cta section-dark" data-reveal><div><p className="eyebrow">A LITTLE INDIA, FOR YOUR TABLE</p><h2 className="serif">Bring a little India<br /><em>to your table.</em></h2><p>Discover the flavours that travel from regional kitchens to modern tables.</p><Button onClick={() => document.getElementById('collection')?.scrollIntoView()}>Explore the pickles</Button></div><div className="final-jar">    <img
-      src="/images/logo/PickleFlav.png"
-      alt="Desi Barni pickle"
-    />
-</div></section>
-    <div id="market-access"><MarketAccess onExplore={() => document.getElementById('collection')?.scrollIntoView()} /></div>
-  </main >;
+      )}
+    </div>
+  );
 }
 
-function AllProducts({ onQuickView, onAdded }: { onQuickView: (product: Product) => void; onAdded: (product: Product) => void }) { const [sort, setSort] = useState('Featured'); const [filter, setFilter] = useState('All flavours'); const [query, setQuery] = useState(''); const list = useMemo(() => [...products].filter((p) => filter === 'All flavours' || p.region === filter).filter((p) => p.name.toLowerCase().includes(query.toLowerCase())).sort((a, b) => sort === 'Price: low to high' ? a.price - b.price : sort === 'Price: high to low' ? b.price - a.price : 0), [filter, query, sort]); return <main className="listing section"><div className="listing-head"><p className="eyebrow">THE DESI BARNI COLLECTION</p><h1 className="serif">Seven flavours.<br /><em>One love for pickle.</em></h1><p>Explore the full collection of regional tastes. Product details and availability are ready to connect to inventory.</p></div><div className="filter-bar"><div className="search-box"><Search size={17} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search the collection" /></div><select value={filter} onChange={(event) => setFilter(event.target.value)}><option>All flavours</option><option>North</option><option>West</option><option>South</option></select><select value={sort} onChange={(event) => setSort(event.target.value)}><option>Featured</option><option>Price: low to high</option><option>Price: high to low</option></select></div><div className="all-products-grid">{list.map((product) => <ProductCard key={product.id} product={product} onQuickView={onQuickView} onAdded={onAdded} />)}</div></main>; }
-
-function Detail({ product, onAdded, onQuickView }: { product: Product; onAdded: (product: Product) => void; onQuickView: (product: Product) => void }) { const { addItem } = useCart(); const [quantity, setQuantity] = useState(1); const [alt, setAlt] = useState(false); const related = products.filter((p) => p.id !== product.id).slice(0, 4); return <main className="detail-page section"><a className="back-link" href="#all-products"><ChevronLeft size={16} /> Back to collection</a><div className="detail-layout"><div className="detail-gallery">{alt ? <ProductArt product={{ ...product, color: product.accent, accent: product.color }} large /> : <ProductArt product={product} large />}<div className="thumbs"><button onClick={() => setAlt(false)} className={!alt ? 'active' : ''}><ProductArt product={product} /></button><button onClick={() => setAlt(true)} className={alt ? 'active' : ''}><ProductArt product={{ ...product, color: product.accent, accent: product.color }} /></button></div></div><div className="detail-copy"><p className="eyebrow">{product.region} · {product.weight}</p><h1 className="serif">{product.name}</h1><p className="detail-lede">{product.description}</p><div className="detail-price">₹{product.price} <small>· {product.weight}</small></div><div className="detail-buy"><div className="quantity"><button onClick={() => setQuantity(Math.max(1, quantity - 1))}><Minus size={13} /></button><b>{quantity}</b><button onClick={() => setQuantity(quantity + 1)}><Plus size={13} /></button></div><Button onClick={() => { for (let i = 0; i < quantity; i += 1) addItem(product); onAdded(product); }}>Add to Barni</Button></div><button className="buy-now" onClick={() => { addItem(product); onAdded(product); window.location.hash = 'checkout'; }}>Buy now</button><div className="detail-facts"><div><span>FLAVOUR PROFILE</span><strong>{product.flavourProfile}</strong></div><div><span>INGREDIENTS</span><strong>{product.ingredients.join(' · ')}</strong></div><div><span>STORAGE</span><strong>Replaceable product information</strong></div><div><span>SHIPPING</span><strong>Calculated at checkout</strong></div></div></div></div><div className="related-section"><p className="eyebrow">YOU MIGHT ALSO LIKE</p><div className="featured-grid">{related.map((p) => <ProductCard key={p.id} product={p} onQuickView={onQuickView} onAdded={onAdded} />)}</div></div></main>; }
-
-function Checkout({ onDone }: { onDone: () => void }) { const { items, subtotal, clearCart } = useCart(); const [submitted, setSubmitted] = useState(false); if (submitted) return <main className="success-page section"><div className="success-mark"><Check /></div><p className="eyebrow">ORDER NOTE RECEIVED</p><h1 className="serif">Your Barni is<br /><em>being imagined.</em></h1><p>This is a demo checkout experience. Your order details were captured locally, ready for a real payment and fulfilment connection.</p><Button onClick={onDone}>Continue exploring</Button></main>; return <main className="checkout section"><div className="checkout-head"><p className="eyebrow">YOUR ORDER</p><h1 className="serif">A little India<br /><em>is on its way.</em></h1></div><div className="checkout-layout"><form onSubmit={(event) => { event.preventDefault(); setSubmitted(true); clearCart(); }}><p className="eyebrow">DELIVERY DETAILS</p><div className="form-grid"><label>Name<input required placeholder="Your full name" /></label><label>Phone<input required placeholder="+91" /></label><label>Email<input required type="email" placeholder="you@example.com" /></label><label>Address<input required placeholder="House, street, area" /></label><label>City<input required placeholder="City" /></label><label>State<input required placeholder="State" /></label><label>Pincode<input required inputMode="numeric" placeholder="000000" /></label></div><button className="button" type="submit">Place order <ArrowRight size={16} /></button><p className="form-note">Demo only — no payment is processed.</p></form><aside className="order-summary"><p className="eyebrow">ORDER SUMMARY</p>{items.map(({ product, quantity }) => <div className="summary-item" key={product.id}><span>{product.name} × {quantity}</span><strong>₹{product.price * quantity}</strong></div>)}<div className="summary-total"><span>Total</span><strong>₹{subtotal}</strong></div></aside></div></main>; }
-
-function Footer({ theme, onTheme }: { theme: Theme; onTheme: () => void }) { return <footer id="footer" className="footer section-dark"><div className="footer-top"><div><Logo /><p>Regional tastes.<br />Modern marketplace.</p></div><div className="footer-links"><div><span>Explore</span><a href="#top">Home</a><a href="#collection">Our Pickles</a><a href="#story">Our Story</a><a href="#regions">Regional Flavours</a></div><div><span>Help</span><a href="#footer">Shipping</a><a href="#footer">Returns</a><a href="#footer">FAQs</a><a href="#footer">Contact</a></div><div><span>Follow along</span><a href="#footer"><Instagram size={16} /> Instagram</a><a href="#footer"><Youtube size={16} /> YouTube</a><a href="#footer"><CircleUserRound size={16} /> Journal</a></div></div></div><div className="footer-bottom"><span>© 2026 Desi Barni</span><button onClick={onTheme}>{theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />} {theme === 'dark' ? 'Light mode' : 'Dark mode'}</button><span>Made with patience & masala</span></div></footer>; }
-
-function AppContent() { const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem('desi-barni-theme') as Theme) || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')); const [cartOpen, setCartOpen] = useState(false); const [quick, setQuick] = useState<Product | null>(null); const [toast, setToast] = useState(''); const [route, setRoute] = useState(window.location.hash); const changeTheme = () => setTheme((current) => current === 'dark' ? 'light' : 'dark'); useEffect(() => { document.documentElement.dataset.theme = theme; localStorage.setItem('desi-barni-theme', theme); }, [theme]); useEffect(() => { const onHash = () => setRoute(window.location.hash); window.addEventListener('hashchange', onHash); return () => window.removeEventListener('hashchange', onHash); }, []); const added = (product: Product) => { setToast(`${product.shortName} added to your Barni`); window.setTimeout(() => setToast(''), 2600); }; const goToCollection = () => { window.history.pushState({}, '', '/#collection'); setRoute('#collection'); }; const productSlug = route.startsWith('#product/') ? route.replace('#product/', '') : ''; const product = getProduct(productSlug); const checkout = route === '#checkout'; const allProducts = route === '#all-products'; const marketAccess = window.location.pathname === '/market-access'; return <div className={`${theme === 'dark' ? 'dark-page' : 'light-page'} app`}><Navbar theme={theme} onTheme={changeTheme} onCart={() => setCartOpen(true)} marketAccess={marketAccess} />{marketAccess ? <MarketAccess onExplore={goToCollection} /> : checkout ? <Checkout onDone={() => { window.location.hash = ''; setRoute(''); }} /> : product ? <Detail product={product} onAdded={added} onQuickView={setQuick} /> : allProducts ? <AllProducts onQuickView={setQuick} onAdded={added} /> : <Home onQuickView={setQuick} onAdded={added} />}<Footer theme={theme} onTheme={changeTheme} /><CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} onCheckout={() => { setCartOpen(false); window.location.hash = 'checkout'; setRoute('#checkout'); }} /><QuickView product={quick} onClose={() => setQuick(null)} onAdded={added} />{toast && <div className="toast"><Check size={16} /> {toast}</div>}</div>; }
-
-export default function App() { return <CartProvider><AppContent /></CartProvider>; }
+export default function App() {
+  return (
+    <CartProvider>
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </CartProvider>
+  );
+}
