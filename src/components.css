@@ -129,6 +129,16 @@ em {
     background: transparent;
 }
 
+.light-page .brand-mark img {
+    mix-blend-mode: multiply;
+    opacity: 1;
+}
+
+.dark-page .brand-mark img {
+    mix-blend-mode: screen;
+    opacity: 1;
+}
+
 .brand-mark.compact {
     width: 78px;
     height: 58px;
