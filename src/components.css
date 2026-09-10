@@ -80,23 +80,62 @@ em {
     width: 100%;
     color: #f4e6c8;
     transition: .35s ease;
+    background: rgba(13, 12, 9, 0.72);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(244, 230, 200, 0.07);
 }
 
 .navbar.scrolled {
-    background: rgba(13, 12, 9, .85);
-    backdrop-filter: blur(16px);
+    background: rgba(13, 12, 9, .92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     height: 68px;
-    border-bottom: 1px solid rgba(244, 230, 200, .13);
+    border-bottom: 1px solid rgba(244, 230, 200, .15);
 }
 
 .light-page .navbar {
     color: #211e18;
+    background: rgba(245, 237, 220, 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(33, 30, 24, 0.08);
 }
 
 .light-page .navbar.scrolled {
-    background: rgba(245, 237, 220, .92);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid rgba(33, 30, 24, .1);
+    background: rgba(245, 237, 220, .96);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(33, 30, 24, .12);
+}
+
+/* ── Regional Flavours page — solid black navbar ── */
+.regions-page .navbar,
+.regions-page .navbar.scrolled {
+    background: #000000;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.regions-page .navbar a,
+.regions-page .navbar .desktop-nav a {
+    color: #ffffff;
+}
+
+.regions-page .navbar .active-link {
+    color: #d99124;
+}
+
+.regions-page .navbar .icon-btn,
+.regions-page .navbar .cart-trigger {
+    color: #ffffff;
+}
+
+.regions-page .navbar .cart-trigger span {
+    background: #d99124;
+    color: #000;
 }
 
 .nav-inner {
@@ -136,7 +175,8 @@ em {
 }
 
 .dark-page .brand-mark img,
-.footer .brand-mark img {
+.footer .brand-mark img,
+.regions-page .navbar .brand-mark img {
     mix-blend-mode: screen;
     filter: none;
     opacity: 1;
@@ -1203,46 +1243,98 @@ em {
     max-width: 360px;
 }
 
-.ingredient-grid {
-    height: 480px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: 1fr 1fr;
-    gap: 10px;
-}
+/* =====================================================
+   SECTION 06 — THE TASTE  (cinematic full-bleed photo)
+   ===================================================== */
 
-.ingredient-tile {
-    background: color-mix(in srgb, var(--product) 46%, #17130e);
+.taste-section {
     position: relative;
+    min-height: 80vh;
+    background: #110d08;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    padding: 0 !important;
 }
 
-.ingredient-tile>span {
-    position: absolute;
-    z-index: 3;
-    top: 14px;
-    left: 14px;
-    font: 18px 'Playfair Display', serif;
-    color: #f4e6c8;
-}
-
-.ingredient-tile .product-art {
-    background: transparent;
+/* Full-bleed background photo */
+.taste-bg-img {
     position: absolute;
     inset: 0;
-    transform: scale(.75);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+    z-index: 1;
+    display: block;
 }
 
-.tile-0 {
-    grid-row: span 2;
+/* Multi-stop gradient: opaque dark left → transparent right */
+.taste-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background:
+        linear-gradient(
+            to right,
+            rgba(14, 10, 5, 0.97)  0%,
+            rgba(14, 10, 5, 0.92) 22%,
+            rgba(14, 10, 5, 0.78) 38%,
+            rgba(14, 10, 5, 0.45) 55%,
+            rgba(14, 10, 5, 0.12) 72%,
+            transparent           88%
+        ),
+        /* subtle bottom vignette */
+        linear-gradient(
+            to top,
+            rgba(14, 10, 5, 0.55) 0%,
+            transparent 28%
+        );
 }
 
-.tile-0 .product-art {
-    transform: scale(1.2);
+/* Text panel sits above both overlay and image */
+.taste-copy {
+    position: relative;
+    z-index: 5;
+    padding: 96px 60px 96px 88px;
+    max-width: 530px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
 }
 
-.tile-2 {
-    grid-column: span 2;
+/* Thin section number line */
+.taste-label {
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    color: rgba(244, 230, 200, 0.45);
+    text-transform: uppercase;
+    margin: 0 0 36px !important;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Giant serif headline */
+.taste-heading {
+    font-size: clamp(3rem, 4.8vw, 5.4rem);
+    line-height: 1.0 !important;
+    color: #f4e6c8;
+    margin: 0 0 32px !important;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+}
+
+.taste-heading em {
+    color: #d99124;
+    font-style: italic;
+}
+
+/* Body text */
+.taste-body {
+    color: rgba(184, 170, 141, 0.9);
+    line-height: 1.78 !important;
+    max-width: 290px;
+    font-size: 13.5px;
+    margin: 0 0 28px !important;
 }
 
 .channels-note {
@@ -2012,6 +2104,11 @@ em {
         gap: 45px;
     }
 
+    .taste-copy {
+        padding: 72px 40px 72px 56px;
+        max-width: 480px;
+    }
+
     .network {
         transform: scale(.9);
         margin: -20px -40px;
@@ -2318,8 +2415,29 @@ em {
         grid-template-columns: 1fr;
     }
 
-    .ingredient-grid {
-        height: 420px;
+    .taste-section {
+        min-height: 70vh;
+    }
+
+    .taste-overlay {
+        background:
+            linear-gradient(
+                to bottom,
+                rgba(14,10,5,0.85) 0%,
+                rgba(14,10,5,0.55) 40%,
+                rgba(14,10,5,0.35) 100%
+            ),
+            linear-gradient(
+                to right,
+                rgba(14,10,5,0.96) 0%,
+                rgba(14,10,5,0.70) 50%,
+                rgba(14,10,5,0.15) 100%
+            );
+    }
+
+    .taste-copy {
+        padding: 56px 24px 56px 28px;
+        max-width: 100%;
     }
 
     .channel-grid {

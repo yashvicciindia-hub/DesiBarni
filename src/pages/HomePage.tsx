@@ -1,9 +1,9 @@
-import { useState, useMemo, type CSSProperties } from 'react';
+import { useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight, Search } from 'lucide-react';
 import { products, type Product } from '@/data/products';
 import ProductCard from '@/components/ProductCard';
-import { ProductArt } from '@/components/ProductArt';
+
 import Button from '@/components/Button';
 import { useReveal } from '@/hooks/useReveal';
 
@@ -293,33 +293,31 @@ export default function HomePage({
         </div>
       </section>
 
-      {/* Editorial Section */}
-      <section className="editorial section-dark" data-reveal>
-        <div className="editorial-copy">
-          <p className="eyebrow">06 · THE TASTE</p>
-          <h2 className="serif">
-            Seven flavours.
-            <br />
-            <em>Countless memories.</em>
+      {/* The Taste — Section 06 */}
+      <section className="taste-section" data-reveal>
+        {/* Full-bleed photo */}
+        <img
+          className="taste-bg-img"
+          src="/images/logo/taste_bg.jpg"
+          alt="Desi Barni six pickle jars — Mango, Red Chilli, Garlic, Green Chilli, Lime, Ginger — arranged on a rustic kitchen table"
+          loading="lazy"
+        />
+        {/* Gradient overlay — dark on left, transparent on right */}
+        <div className="taste-overlay" />
+
+        {/* Text panel */}
+        <div className="taste-copy">
+          <p className="taste-label">06 — THE TASTE</p>
+          <h2 className="serif taste-heading">
+            Seven<br />flavours.<br />
+            <em>Countless<br />memories.</em>
           </h2>
-          <p>
+          <p className="taste-body">
             Some tastes arrive with a little heat. Others arrive with a familiar kitchen, a summer afternoon, a table full of people.
           </p>
           <Link className="text-link" to="/pickles">
             Meet the collection <ArrowRight size={15} />
           </Link>
-        </div>
-        <div className="ingredient-grid">
-          {products.map((product, index) => (
-            <div
-              key={product.id}
-              className={`ingredient-tile tile-${index}`}
-              style={{ '--product': product.color } as CSSProperties}
-            >
-              <span>{product.shortName}</span>
-              <ProductArt product={product} />
-            </div>
-          ))}
         </div>
       </section>
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { Check } from 'lucide-react';
 import { CartProvider } from '@/context/CartContext';
 import type { Product } from '@/data/products';
@@ -41,8 +41,11 @@ function AppContent() {
     window.setTimeout(() => setToast(''), 2600);
   };
 
+  const location = useLocation();
+  const isRegionsPage = location.pathname === '/regions';
+
   return (
-    <div className={`${theme === 'dark' ? 'dark-page' : 'light-page'} app`}>
+    <div className={`${theme === 'dark' ? 'dark-page' : 'light-page'} app${isRegionsPage ? ' regions-page' : ''}`}>
       <ScrollToTop />
       <Navbar theme={theme} onTheme={changeTheme} onCart={() => setCartOpen(true)} />
 
