@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, ChevronLeft, ChevronRight, Minus, Plus, X } from 'lucide-react';
+import { ArrowRight, Minus, Plus, X } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import type { Product } from '@/data/products';
 import Button from './Button';
-import { ProductArt } from './ProductArt';
 
 export default function QuickView({
   product,
@@ -17,7 +16,6 @@ export default function QuickView({
 }) {
   const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
-  const [alt, setAlt] = useState(false);
   const navigate = useNavigate();
 
   if (!product) return null;
@@ -36,14 +34,7 @@ export default function QuickView({
           <X />
         </button>
         <div className="quick-art">
-          {alt ? (
-            <ProductArt product={{ ...product, color: product.accent, accent: product.color }} large />
-          ) : (
-            <ProductArt product={product} large />
-          )}
-          <button className="gallery-switch" onClick={() => setAlt(!alt)}>
-            {alt ? <ChevronLeft /> : <ChevronRight />}
-          </button>
+          <img src={product.image} alt={product.name} className="product-image quick-product-image" />
         </div>
         <div className="quick-copy">
           <p className="eyebrow">

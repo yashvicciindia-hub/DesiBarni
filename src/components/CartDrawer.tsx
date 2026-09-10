@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Minus, Plus, ShoppingBag, X } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import Button from './Button';
-import { ProductArt } from './ProductArt';
 
 export default function CartDrawer({
   open,
@@ -55,7 +54,7 @@ export default function CartDrawer({
             <div className="cart-items">
               {items.map(({ product, quantity }) => (
                 <div className="cart-item" key={product.id}>
-                  <ProductArt product={product} />
+                  <img src={product.image} alt={product.name} className="product-image cart-product-image" />
                   <div className="cart-item-detail">
                     <div className="cart-item-title">
                       <h4>{product.name}</h4>

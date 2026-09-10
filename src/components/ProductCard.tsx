@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Plus, RefreshCw } from 'lucide-react';
+import { ArrowRight, Plus } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import type { Product } from '@/data/products';
-import { ProductArt } from './ProductArt';
 
 export default function ProductCard({
   product,
@@ -16,22 +15,14 @@ export default function ProductCard({
 }) {
   const { addItem } = useCart();
   const [liked, setLiked] = useState(false);
-  const [showAlternate, setShowAlternate] = useState(false);
 
   return (
     <article className="product-card">
       <div
-        className={`product-visual ${showAlternate ? 'show-alternate' : ''}`}
-        onMouseEnter={() => setShowAlternate(true)}
-        onMouseLeave={() => setShowAlternate(false)}
+        className="product-visual"
         onClick={() => onQuickView(product)}
       >
-        <div className="product-art product-art-primary">
-          <ProductArt product={product} />
-        </div>
-        <div className="product-art product-art-alt">
-          <ProductArt product={{ ...product, color: product.accent, accent: product.color }} />
-        </div>
+        <img src={product.image} alt={product.name} className="product-image" />
         <button
           className={`wishlist ${liked ? 'liked' : ''}`}
           aria-label="Add to wishlist"
@@ -41,16 +32,6 @@ export default function ProductCard({
           }}
         >
           {liked ? '♥' : '♡'}
-        </button>
-        <button
-          className="image-toggle"
-          aria-label="Show alternate product image"
-          onClick={(event) => {
-            event.stopPropagation();
-            setShowAlternate(!showAlternate);
-          }}
-        >
-          <RefreshCw size={13} />
         </button>
         <span className="view-detail">
           VIEW DETAILS <ArrowRight size={13} />
@@ -87,3 +68,8 @@ export default function ProductCard({
     </article>
   );
 }
+
+
+
+
+

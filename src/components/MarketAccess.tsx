@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ArrowDown, ArrowRight, ArrowUpRight, Check, Circle, Factory, Globe2, PackageCheck, ShoppingBag, Store, Utensils } from 'lucide-react';
+import { ArrowDown, ArrowRight, ArrowUpRight, Check, Circle, Factory, Globe2, PackageCheck, Send, ShoppingBag, Store, Utensils } from 'lucide-react';
 import { products } from '@/data/products';
 
 type MarketAccessProps = { onExplore: () => void };
@@ -69,7 +69,94 @@ function SectionIntro({ number, eyebrow, title, copy }: { number: string; eyebro
 }
 
 function MarketAccessHero({ onExplore }: MarketAccessProps) {
-  return <section className="ma-hero hero-grid noise"><div className="ma-hero-copy"><p className="eyebrow ma-reveal">MARKET ACCESS</p><h1 className="serif ma-reveal ma-delay-1">From local taste<br /><em>to national market.</em></h1><p className="ma-hero-statement ma-reveal ma-delay-2">India has the pickles.<br />The challenge is market access.</p><p className="ma-hero-body ma-reveal ma-delay-3">Desi Barni is building a structured pathway that helps small and regional pickle businesses prepare, position and connect with domestic and international buyers.</p><div className="ma-hero-actions ma-reveal ma-delay-3"><button className="button" onClick={onExplore}>Explore the pathway <ArrowDown size={16} /></button><span>BUILDING THE BRIDGE</span></div></div><div className="ma-bridge" aria-label="Local producers connected to market buyers"><div className="ma-bridge-line" /><div className="ma-node ma-node-producer"><span className="ma-node-icon">◉</span><small>LOCAL</small><strong>PRODUCER</strong></div><div className="ma-node ma-node-core"><span>DESI<br />BARNI</span></div><div className="ma-node ma-node-market"><small>MARKET</small><strong>BUYERS</strong><div className="ma-buyer-list"><span>RETAIL</span><span>B2B</span><span>E-COMMERCE</span><span>EXPORT</span></div></div></div><div className="ma-hero-foot"><span>01 — THE OPPORTUNITY</span><span>REGIONAL TASTE · STRUCTURED ACCESS</span></div></section>;
+  const scrollToForm = () => {
+    const el = document.getElementById('partner-form');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  return (
+    <section className="ma-hero hero-grid noise">
+      <div className="ma-hero-copy">
+        <p className="eyebrow ma-reveal" style={{ color: '#d99124', letterSpacing: '2px' }}>
+          MARKET ACCESS INITIATIVE
+        </p>
+        <h1 className="serif ma-reveal ma-delay-1">
+          From local taste
+          <br />
+          <em style={{ color: '#d99124', fontStyle: 'italic', fontWeight: 400 }}>to national market.</em>
+        </h1>
+        <p className="ma-hero-statement ma-reveal ma-delay-2">
+          India has the pickles. The challenge is market access.
+        </p>
+        <p className="ma-hero-body ma-reveal ma-delay-3">
+          Desi Barni is building a structured pathway that helps small and regional pickle businesses prepare, position, and connect with domestic and international buyers.
+        </p>
+        <div className="ma-hero-actions ma-reveal ma-delay-3">
+          <button className="button" onClick={onExplore}>
+            Explore the pathway <ArrowDown size={16} />
+          </button>
+          <button className="button button-secondary" onClick={scrollToForm}>
+            Partner with us <ArrowRight size={16} />
+          </button>
+        </div>
+      </div>
+
+      <div className="ma-bridge-container ma-reveal ma-delay-2">
+        <div className="ma-bridge-card">
+          <div className="ma-bridge-header">
+            <span className="ma-bridge-badge">THE CONNECTED PATHWAY</span>
+            <small style={{ opacity: 0.8, fontWeight: 600 }}>Direct Route to Buyers</small>
+          </div>
+
+          <div className="ma-bridge-visual">
+            <div className="ma-path-line">
+              <div className="ma-path-pulse" />
+            </div>
+
+            {/* Node 1: Producer */}
+            <div className="ma-path-node node-producer">
+              <div className="ma-node-icon-wrap">
+                <Factory size={20} />
+              </div>
+              <small>01 · SOURCE</small>
+              <strong>Local Producer</strong>
+              <span>Home Kitchens & MSMEs</span>
+            </div>
+
+            {/* Node 2: Core Hub */}
+            <div className="ma-path-node node-hub">
+              <div className="ma-node-icon-wrap">
+                <PackageCheck size={24} />
+              </div>
+              <small>BRIDGE</small>
+              <strong>Desi Barni</strong>
+              <span>Branding & Access</span>
+            </div>
+
+            {/* Node 3: Market Buyers */}
+            <div className="ma-path-node node-buyers">
+              <div className="ma-node-icon-wrap">
+                <Globe2 size={20} />
+              </div>
+              <small>02 · DEMAND</small>
+              <strong>Market Buyers</strong>
+              <div className="ma-buyer-tags">
+                <span>RETAIL</span>
+                <span>B2B</span>
+                <span>E-COM</span>
+                <span>EXPORT</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="ma-hero-foot">
+        <span>01 — THE OPPORTUNITY</span>
+        <span>REGIONAL TASTE · STRUCTURED ACCESS · PAN-INDIA & EXPORT NETWORK</span>
+      </div>
+    </section>
+  );
 }
 
 function MarketAccessGap() {
@@ -79,42 +166,264 @@ function MarketAccessGap() {
   return <section className="ma-section ma-gap-section"><Reveal><SectionIntro number="01" eyebrow="THE MARKET ACCESS GAP" title={<>India has the pickles.<br /><em>The market access is fragmented.</em></>} copy="Good Product ≠ Market Access. The challenge is the gap between what small producers make and what buyers can discover and procure." /></Reveal><div className={`ma-gap-visual ${bridged ? 'is-bridged' : ''}`}><div className="ma-gap-column ma-have"><p className="eyebrow">WHAT SMALL PRODUCERS HAVE</p>{have.map((item) => <div key={item}><Check size={15} />{item}</div>)}</div><div className="ma-gap-center"><span>LOCAL<br />PRODUCER</span><div className="ma-gap-core"><strong>{bridged ? 'BRIDGE' : 'MARKET ACCESS GAP'}</strong><small>{bridged ? 'DESI BARNI PATHWAY' : 'THE MISSING MIDDLE'}</small></div><span>NATIONAL +<br />INTERNATIONAL BUYER</span><button className="ma-bridge-toggle" onClick={() => setBridged(!bridged)}>{bridged ? 'Reset gap' : 'Build the bridge'} <ArrowRight size={14} /></button></div><div className="ma-gap-column ma-lack"><p className="eyebrow">WHAT THEY LACK</p>{lack.map((item, index) => <div key={item} style={{ '--item-delay': `${index * 70}ms` } as React.CSSProperties}><span>0{index + 1}</span>{item}</div>)}</div></div></section>;
 }
 
+/* High-Visibility Interactive Onboarding Inquiry Form */
+function MarketAccessInquiryForm() {
+  const [role, setRole] = useState<'producer' | 'buyer'>('producer');
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+  };
+
+  return (
+    <section className="ma-inquiry-section" id="partner-form">
+      <Reveal>
+        <SectionIntro
+          number="02"
+          eyebrow="PARTNER & ONBOARDING HUB"
+          title={
+            <>
+              Join the Market Access<br />
+              <em>Ecosystem Network.</em>
+            </>
+          }
+          copy="Whether you are a regional pickle producer seeking market access or a commercial buyer looking for verified regional taste, connect with our onboarding team."
+        />
+      </Reveal>
+
+      <div className="ma-inquiry-card">
+        {/* Role Tabs */}
+        <div className="ma-role-tabs">
+          <button
+            type="button"
+            className={`ma-role-tab ${role === 'producer' ? 'active' : ''}`}
+            onClick={() => {
+              setRole('producer');
+              setSubmitted(false);
+            }}
+          >
+            <Factory size={22} />
+            <div>
+              <strong>For Local Pickle Producers</strong>
+              <small>Micro-kitchens, SHGs, MSMEs & FPOs</small>
+            </div>
+          </button>
+
+          <button
+            type="button"
+            className={`ma-role-tab ${role === 'buyer' ? 'active' : ''}`}
+            onClick={() => {
+              setRole('buyer');
+              setSubmitted(false);
+            }}
+          >
+            <Store size={22} />
+            <div>
+              <strong>For Commercial Buyers</strong>
+              <small>Retailers, B2B Hospitality, E-Com & Exporters</small>
+            </div>
+          </button>
+        </div>
+
+        {submitted ? (
+          <div className="ma-inquiry-success">
+            <div className="ma-success-badge">
+              <Check size={28} />
+            </div>
+            <h3 className="serif">Inquiry Successfully Received</h3>
+            <p>
+              Thank you for connecting with Desi Barni! Our Market Access onboarding team will evaluate your details and contact you within 48 hours.
+            </p>
+            <button type="button" className="button" onClick={() => setSubmitted(false)}>
+              Submit Another Application
+            </button>
+          </div>
+        ) : (
+          <form className="ma-form-body" onSubmit={handleSubmit}>
+            {role === 'producer' ? (
+              <>
+                <div className="ma-form-header">
+                  <p className="eyebrow" style={{ color: '#d99124' }}>
+                    PRODUCER ONBOARDING APPLICATION
+                  </p>
+                  <p className="ma-form-subtext">
+                    Fill in your production details below to request market access, packaging, or compliance support.
+                  </p>
+                </div>
+
+                <div className="ma-form-grid">
+                  <div className="ma-field-group">
+                    <label htmlFor="producer-name">Contact Person Name *</label>
+                    <input id="producer-name" required placeholder="e.g. Radhika Sharma" />
+                  </div>
+
+                  <div className="ma-field-group">
+                    <label htmlFor="producer-brand">Brand / Kitchen Name *</label>
+                    <input id="producer-brand" required placeholder="e.g. Shahi Avakaya Kitchens" />
+                  </div>
+
+                  <div className="ma-field-group">
+                    <label htmlFor="producer-phone">Phone Number (+91) *</label>
+                    <input id="producer-phone" required placeholder="+91 98765 43210" />
+                  </div>
+
+                  <div className="ma-field-group">
+                    <label htmlFor="producer-email">Email Address *</label>
+                    <input id="producer-email" required type="email" placeholder="producer@example.com" />
+                  </div>
+
+                  <div className="ma-field-group">
+                    <label htmlFor="producer-region">Region / State *</label>
+                    <select id="producer-region" required>
+                      <option value="">Select your region</option>
+                      <option value="North">North India (Punjab, UP, Haryana)</option>
+                      <option value="West">West India (Gujarat, Maharashtra)</option>
+                      <option value="South">South India (Andhra, Kerala, Karnataka, TN)</option>
+                      <option value="East">East India (Bengal, Bihar, Odisha)</option>
+                      <option value="Northeast">Northeast India (Assam, Nagaland, etc.)</option>
+                    </select>
+                  </div>
+
+                  <div className="ma-field-group">
+                    <label htmlFor="producer-scale">Production Scale *</label>
+                    <select id="producer-scale" required>
+                      <option value="">Select your enterprise type</option>
+                      <option value="Home Kitchen">Home Kitchen / Micro Producer</option>
+                      <option value="Women SHG">Women Self-Help Group (SHG)</option>
+                      <option value="MSME">Small Enterprise / MSME Manufacturer</option>
+                      <option value="FPO">FPO-Linked Enterprise</option>
+                    </select>
+                  </div>
+
+                  <div className="ma-field-group full-width">
+                    <label htmlFor="producer-items">Pickle Varieties Produced</label>
+                    <input id="producer-items" placeholder="e.g. Raw Mango, Garlic, Green Chilli, Lime, Mixed Veg" />
+                  </div>
+
+                  <div className="ma-field-group full-width">
+                    <label htmlFor="producer-support">Primary Support Needed</label>
+                    <select id="producer-support">
+                      <option value="Market Access">Connecting with Commercial Buyers & Distributors</option>
+                      <option value="Packaging">Retail Packaging & Brand Specification</option>
+                      <option value="Compliance">FSSAI, GST & Food Safety Documentation</option>
+                      <option value="Export">Export Readiness & International Linkages</option>
+                    </select>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="ma-form-header">
+                  <p className="eyebrow" style={{ color: '#66752a' }}>
+                    COMMERCIAL BUYER SOURCING APPLICATION
+                  </p>
+                  <p className="ma-form-subtext">
+                    Tell us about your organization's sourcing requirements for regional Indian pickles.
+                  </p>
+                </div>
+
+                <div className="ma-form-grid">
+                  <div className="ma-field-group">
+                    <label htmlFor="buyer-company">Company / Enterprise Name *</label>
+                    <input id="buyer-company" required placeholder="e.g. Grand Heritage Hotels / Spice Bazaar" />
+                  </div>
+
+                  <div className="ma-field-group">
+                    <label htmlFor="buyer-person">Sourcing Manager / Contact Name *</label>
+                    <input id="buyer-person" required placeholder="e.g. Vikram Verma" />
+                  </div>
+
+                  <div className="ma-field-group">
+                    <label htmlFor="buyer-phone">Phone Number *</label>
+                    <input id="buyer-phone" required placeholder="+91 98765 43210" />
+                  </div>
+
+                  <div className="ma-field-group">
+                    <label htmlFor="buyer-email">Work Email *</label>
+                    <input id="buyer-email" required type="email" placeholder="sourcing@company.com" />
+                  </div>
+
+                  <div className="ma-field-group">
+                    <label htmlFor="buyer-type">Buyer Category *</label>
+                    <select id="buyer-type" required>
+                      <option value="">Select business category</option>
+                      <option value="Retail">Organized Retail / Supermarket Chain</option>
+                      <option value="Hospitality">Hotels, Restaurants & Catering (B2B)</option>
+                      <option value="Corporate">Corporate Gifting & Festive Hampers</option>
+                      <option value="E-Commerce">E-Commerce Marketplace / D2C Platform</option>
+                      <option value="Export">Importer / Diaspora Distributor</option>
+                    </select>
+                  </div>
+                  
+
+                  <div className="ma-field-group">
+                    <label htmlFor="buyer-volume">Estimated Monthly Volume *</label>
+                    <select id="buyer-volume" required>
+                      <option value="">Select volume scale</option>
+                      <option value="Trial">Trial Order (50 - 200 jars)</option>
+                      <option value="Medium">Medium Volume (200 - 1,000 jars/month)</option>
+                      <option value="Large">Large Commercial (1,000 - 5,000 jars/month)</option>
+                      <option value="Bulk Export">Bulk Export Container</option>
+                    </select>
+                  </div>
+
+                  <div className="ma-field-group full-width">
+                    <label htmlFor="buyer-details">Regional Flavours or Specifications Desired</label>
+                    <textarea id="buyer-details" rows={3} placeholder="Describe specific regional taste profiles, custom labeling, or packaging preferences..." />
+                  </div>
+                </div>
+              </>
+            )}
+
+            <div style={{ marginTop: 28, textAlign: 'right' }}>
+              <button type="submit" className="button" style={{ display: 'inline-flex', padding: '14px 28px' }}>
+                Submit Inquiry <Send size={15} style={{ marginLeft: 8 }} />
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+    </section>
+  );
+}
+
 function Ecosystem() {
   const [active, setActive] = useState(0); const layer = layers[active]; const Icon = layer.icon;
-  return <section className="ma-section ma-ecosystem section-dark"><Reveal><SectionIntro number="02" eyebrow="THE ECOSYSTEM" title={<>A large and diverse ecosystem.<br /><em>Highly fragmented.</em></>} copy="Five interconnected layers create both complexity and opportunity." /></Reveal><div className="ma-ecosystem-layout"><div className="ma-layer-list">{layers.map((item, index) => { const LayerIcon = item.icon; return <button key={item.name} className={active === index ? 'active' : ''} onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)} onClick={() => setActive(index)}><span>0{index + 1}</span><LayerIcon size={18} /><strong>{item.name}</strong><ArrowRight size={15} /></button>; })}</div><div className="ma-ecosystem-display"><div className="ma-ecosystem-orbit"><div className="ma-orbit-line orbit-one" /><div className="ma-orbit-line orbit-two" /><div className="ma-ecosystem-core">MARKET<br />ACCESS</div><div className="ma-orbit-dot dot-a">TASTE</div><div className="ma-orbit-dot dot-b">TRUST</div><div className="ma-orbit-dot dot-c">DEMAND</div></div><div className="ma-layer-detail"><Icon size={22} /><p className="eyebrow">{layer.name}</p><h3 className="serif">{layer.detail}</h3><div>{layer.items.map((item) => <span key={item}>{item}</span>)}</div></div></div></div></section>;
+  return <section className="ma-section ma-ecosystem section-dark"><Reveal><SectionIntro number="03" eyebrow="THE ECOSYSTEM" title={<>A large and diverse ecosystem.<br /><em>Highly fragmented.</em></>} copy="Five interconnected layers create both complexity and opportunity." /></Reveal><div className="ma-ecosystem-layout"><div className="ma-layer-list">{layers.map((item, index) => { const LayerIcon = item.icon; return <button key={item.name} className={active === index ? 'active' : ''} onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)} onClick={() => setActive(index)}><span>0{index + 1}</span><LayerIcon size={18} /><strong>{item.name}</strong><ArrowRight size={15} /></button>; })}</div><div className="ma-ecosystem-display"><div className="ma-ecosystem-orbit"><div className="ma-orbit-line orbit-one" /><div className="ma-orbit-line orbit-two" /><div className="ma-ecosystem-core">MARKET<br />ACCESS</div><div className="ma-orbit-dot dot-a">TASTE</div><div className="ma-orbit-dot dot-b">TRUST</div><div className="ma-orbit-dot dot-c">DEMAND</div></div><div className="ma-layer-detail"><Icon size={22} /><p className="eyebrow">{layer.name}</p><h3 className="serif">{layer.detail}</h3><div>{layer.items.map((item) => <span key={item}>{item}</span>)}</div></div></div></div></section>;
 }
 
 function ValueCreation() {
   const [active, setActive] = useState(0); const step = valueSteps[active];
-  return <section id="pathway" className="ma-section ma-value"><Reveal><SectionIntro number="03" eyebrow="HOW VALUE IS CREATED" title={<>Prepare.<br /><em>Connect. Sell. Repeat. Scale.</em></>} copy="A market-access model that learns from real demand and turns regional identity into a stronger proposition." /></Reveal><div className="ma-process"><div className="ma-process-tabs">{valueSteps.map((item, index) => <button key={item[0]} className={active === index ? 'active' : ''} onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)} onClick={() => setActive(index)}><span>0{index + 1}</span>{item[0]}</button>)}</div><div className="ma-process-progress"><i style={{ width: `${((active + 1) / valueSteps.length) * 100}%` }} /></div><div className="ma-process-detail"><span className="ma-process-number">0{active + 1}</span><div><p className="eyebrow">{active < 4 ? `STAGE 0${active + 1}` : 'CONTINUOUS LEARNING'}</p><h3 className="serif">{step[0]}</h3><p>{step[1]}</p></div><ArrowUpRight size={28} /></div></div></section>;
+  return <section id="pathway" className="ma-section ma-value"><Reveal><SectionIntro number="04" eyebrow="HOW VALUE IS CREATED" title={<>Prepare.<br /><em>Connect. Sell. Repeat. Scale.</em></>} copy="A market-access model that learns from real demand and turns regional identity into a stronger proposition." /></Reveal><div className="ma-process"><div className="ma-process-tabs">{valueSteps.map((item, index) => <button key={item[0]} className={active === index ? 'active' : ''} onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)} onClick={() => setActive(index)}><span>0{index + 1}</span>{item[0]}</button>)}</div><div className="ma-process-progress"><i style={{ width: `${((active + 1) / valueSteps.length) * 100}%` }} /></div><div className="ma-process-detail"><span className="ma-process-number">0{active + 1}</span><div><p className="eyebrow">{active < 4 ? `STAGE 0${active + 1}` : 'CONTINUOUS LEARNING'}</p><h3 className="serif">{step[0]}</h3><p>{step[1]}</p></div><ArrowUpRight size={28} /></div></div></section>;
 }
 
 function DemandSection() {
-  return <section className="ma-section section-dark ma-demand"><Reveal><SectionIntro number="04" eyebrow="REAL MARKET DEMAND" title={<>Support matters most<br /><em>when it leads to demand.</em></>} /></Reveal><div className="ma-demand-grid"><div className="ma-demand-pillar"><span>01</span><h3 className="serif">ENTERPRISE<br />DEVELOPMENT</h3><p>Finance · Infrastructure · Training · Branding · Facilities</p></div><div className="ma-demand-core">REAL<br /><em>MARKET DEMAND</em><span className="ma-demand-path path-left" /><span className="ma-demand-path path-right" /></div><div className="ma-demand-pillar"><span>02</span><h3 className="serif">MARKET<br />ACCESS</h3><p>Buyer discovery · Industry links · Trade events · Networking</p></div><div className="ma-demand-pillar ma-demand-pillar-bottom"><span>03</span><h3 className="serif">CORE<br />MARKET</h3><p>Retail · Institutional · E-commerce · Exporters · Distributors</p></div></div></section>;
+  return <section className="ma-section section-dark ma-demand"><Reveal><SectionIntro number="05" eyebrow="REAL MARKET DEMAND" title={<>Support matters most<br /><em>when it leads to demand.</em></>} /></Reveal><div className="ma-demand-grid"><div className="ma-demand-pillar"><span>01</span><h3 className="serif">ENTERPRISE<br />DEVELOPMENT</h3><p>Finance · Infrastructure · Training · Branding · Facilities</p></div><div className="ma-demand-core">REAL<br /><em>MARKET DEMAND</em><span className="ma-demand-path path-left" /><span className="ma-demand-path path-right" /></div><div className="ma-demand-pillar"><span>02</span><h3 className="serif">MARKET<br />ACCESS</h3><p>Buyer discovery · Industry links · Trade events · Networking</p></div><div className="ma-demand-pillar ma-demand-pillar-bottom"><span>03</span><h3 className="serif">CORE<br />MARKET</h3><p>Retail · Institutional · E-commerce · Exporters · Distributors</p></div></div></section>;
 }
 
 function RegionalFlavours() {
   const [active, setActive] = useState(0); const region = regions[active];
-  return <section className="ma-section ma-regional"><Reveal><SectionIntro number="05" eyebrow="REGIONAL FLAVOURS AS OPPORTUNITY" title={<>One country.<br /><em>Hundreds of regional tastes.</em></>} copy="India's regional pickle diversity is a commercial differentiator that remains largely unexploited at the national and export level." /></Reveal><div className="ma-regional-layout"><div className="ma-india-visual"><div className="ma-india-shape"><span>INDIA</span>{regions.map((item, index) => <button key={item.name} className={`ma-region-pin pin-${index} ${active === index ? 'active' : ''}`} style={{ '--pin-tone': item.tone } as React.CSSProperties} onClick={() => setActive(index)} aria-label={`Show ${item.name} region`} />)}</div><p>REGIONAL IDENTITY<br />BECOMES A PREMIUM PROPOSITION</p></div><div className="ma-region-cards">{regions.map((item, index) => <button key={item.name} className={active === index ? 'active' : ''} onClick={() => setActive(index)}><span>{item.name}</span><strong>{item.pickles}</strong><small>{item.detail}</small></button>)}<div className="ma-region-detail" style={{ borderColor: region.tone }}><p className="eyebrow">{region.name} · MARKET OPPORTUNITY</p><h3 className="serif">{region.detail}</h3><p>{region.pickles}</p></div></div></div></section>;
+  return <section className="ma-section ma-regional"><Reveal><SectionIntro number="06" eyebrow="REGIONAL FLAVOURS AS OPPORTUNITY" title={<>One country.<br /><em>Hundreds of regional tastes.</em></>} copy="India's regional pickle diversity is a commercial differentiator that remains largely unexploited at the national and export level." /></Reveal><div className="ma-regional-layout"><div className="ma-india-visual"><div className="ma-india-shape"><span>INDIA</span>{regions.map((item, index) => <button key={item.name} className={`ma-region-pin pin-${index} ${active === index ? 'active' : ''}`} style={{ '--pin-tone': item.tone } as React.CSSProperties} onClick={() => setActive(index)} aria-label={`Show ${item.name} region`} />)}</div><p>REGIONAL IDENTITY<br />BECOMES A PREMIUM PROPOSITION</p></div><div className="ma-region-cards">{regions.map((item, index) => <button key={item.name} className={active === index ? 'active' : ''} onClick={() => setActive(index)}><span>{item.name}</span><strong>{item.pickles}</strong><small>{item.detail}</small></button>)}<div className="ma-region-detail" style={{ borderColor: region.tone }}><p className="eyebrow">{region.name} · MARKET OPPORTUNITY</p><h3 className="serif">{region.detail}</h3><p>{region.pickles}</p></div></div></div></section>;
 }
 
 function BuyerChannels() {
-  return <section className="ma-section section-dark ma-buyers"><Reveal><SectionIntro number="06" eyebrow="WHO WE CONNECT" title={<>Connecting small producers<br /><em>with real demand.</em></>} /></Reveal><div className="ma-buyer-grid">{buyers.map(([name, detail, Icon], index) => <article className="ma-buyer-card" key={name}><span>0{index + 1}</span><Icon size={25} /><h3 className="serif">{name}</h3><p>{detail}</p><ArrowUpRight /></article>)}</div></section>;
+  return <section className="ma-section section-dark ma-buyers"><Reveal><SectionIntro number="07" eyebrow="WHO WE CONNECT" title={<>Connecting small producers<br /><em>with real demand.</em></>} /></Reveal><div className="ma-buyer-grid">{buyers.map(([name, detail, Icon], index) => <article className="ma-buyer-card" key={name}><span>0{index + 1}</span><Icon size={25} /><h3 className="serif">{name}</h3><p>{detail}</p><ArrowUpRight /></article>)}</div></section>;
 }
 
 function MarketReadyPath() {
   const [active, setActive] = useState(0); const item = pathway[active];
-  return <section className="ma-section ma-path"><Reveal><SectionIntro number="07" eyebrow="THE MARKET-READY PATH" title={<>From local producer<br /><em>to market-ready enterprise.</em></>} copy="The proposed market-access model creates a structured pathway that connects small pickle businesses with national and international buyers." /></Reveal><div className="ma-pathway">{pathway.map((step, index) => <button key={step[1]} className={active === index ? 'active' : ''} onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)} onClick={() => setActive(index)}><span>{step[0]}</span><strong>{step[1]}</strong><small>{active === index ? step[2] : 'Explore stage'}</small></button>)}</div><div className="ma-pathway-note"><Circle size={12} /> {item[2]}</div></section>;
+  return <section className="ma-section ma-path"><Reveal><SectionIntro number="08" eyebrow="THE MARKET-READY PATH" title={<>From local producer<br /><em>to market-ready enterprise.</em></>} copy="The proposed market-access model creates a structured pathway that connects small pickle businesses with national and international buyers." /></Reveal><div className="ma-pathway">{pathway.map((step, index) => <button key={step[1]} className={active === index ? 'active' : ''} onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)} onClick={() => setActive(index)}><span>{step[0]}</span><strong>{step[1]}</strong><small>{active === index ? step[2] : 'Explore stage'}</small></button>)}</div><div className="ma-pathway-note"><Circle size={12} /> {item[2]}</div></section>;
 }
 
 function Roadmap() {
   const [active, setActive] = useState(0); const item = roadmap[active];
-  return <section id="journey" className="ma-section section-dark ma-roadmap"><Reveal><SectionIntro number="08" eyebrow="THE SIX-STAGE JOURNEY" title={<>From one pilot<br /><em>to pan-India.</em></>} copy="A six-stage roadmap from a personal pilot to a scalable ecosystem initiative." /></Reveal><div className="ma-roadmap-track"><div className="ma-roadmap-line"><i style={{ width: `${(active / (roadmap.length - 1)) * 100}%` }} /></div>{roadmap.map((step, index) => <button key={step[1]} className={active === index ? 'active' : ''} onClick={() => setActive(index)} onMouseEnter={() => setActive(index)}><span>{step[0]}</span><strong>{step[1]}</strong></button>)}</div><div className="ma-roadmap-detail"><span className="ma-process-number">{item[0]}</span><div><p className="eyebrow">ROADMAP STAGE</p><h3 className="serif">{item[1]}</h3><p>{item[2]}</p></div></div></section>;
+  return <section id="journey" className="ma-section section-dark ma-roadmap"><Reveal><SectionIntro number="09" eyebrow="THE SIX-STAGE JOURNEY" title={<>From one pilot<br /><em>to pan-India.</em></>} copy="A six-stage roadmap from a personal pilot to a scalable ecosystem initiative." /></Reveal><div className="ma-roadmap-track"><div className="ma-roadmap-line"><i style={{ width: `${(active / (roadmap.length - 1)) * 100}%` }} /></div>{roadmap.map((step, index) => <button key={step[1]} className={active === index ? 'active' : ''} onClick={() => setActive(index)} onMouseEnter={() => setActive(index)}><span>{step[0]}</span><strong>{step[1]}</strong></button>)}</div><div className="ma-roadmap-detail"><span className="ma-process-number">{item[0]}</span><div><p className="eyebrow">ROADMAP STAGE</p><h3 className="serif">{item[1]}</h3><p>{item[2]}</p></div></div></section>;
 }
 
 function PilotSection() {
   const [activeTest, setActiveTest] = useState(0);
-  return <section className="ma-section ma-pilot"><Reveal><SectionIntro number="09" eyebrow="THE 7-PRODUCT PILOT" title={<>Starting small.<br /><em>Building a scalable model.</em></>} copy="The 7-product pilot is a live R&D laboratory — not a commercial launch. It tests the requirements of a scalable ecosystem model." /></Reveal><div className="ma-pilot-products">{products.map((product) => <span key={product.id}>{product.shortName}</span>)}</div><div className="ma-pilot-note"><PackageCheck size={23} /><div><strong>LIVE R&D LABORATORY</strong><p>Product · Pricing · Packaging · Customer · Market-access requirements</p></div></div><div className="ma-test-grid"><p className="eyebrow">10 · WHAT THE PILOT TESTS</p>{pilotTests.map((test, index) => <button key={test} className={activeTest === index ? 'active' : ''} onMouseEnter={() => setActiveTest(index)} onFocus={() => setActiveTest(index)} onClick={() => setActiveTest(index)}><span>0{index + 1}</span><strong>{test}</strong><ArrowRight size={15} /></button>)}</div></section>;
+  return <section className="ma-section ma-pilot"><Reveal><SectionIntro number="10" eyebrow="THE 7-PRODUCT PILOT" title={<>Starting small.<br /><em>Building a scalable model.</em></>} copy="The 7-product pilot is a live R&D laboratory — not a commercial launch. It tests the requirements of a scalable ecosystem model." /></Reveal><div className="ma-pilot-products">{products.map((product) => <span key={product.id}>{product.shortName}</span>)}</div><div className="ma-pilot-note"><PackageCheck size={23} /><div><strong>LIVE R&D LABORATORY</strong><p>Product · Pricing · Packaging · Customer · Market-access requirements</p></div></div><div className="ma-test-grid"><p className="eyebrow">WHAT THE PILOT TESTS</p>{pilotTests.map((test, index) => <button key={test} className={activeTest === index ? 'active' : ''} onMouseEnter={() => setActiveTest(index)} onFocus={() => setActiveTest(index)} onClick={() => setActiveTest(index)}><span>0{index + 1}</span><strong>{test}</strong><ArrowRight size={15} /></button>)}</div></section>;
 }
 
 function Phases() {
@@ -123,5 +432,39 @@ function Phases() {
 
 export default function MarketAccess({ onExplore }: MarketAccessProps) {
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'auto' }); }, []);
-  return <main className="market-access"><MarketAccessHero onExplore={onExplore} /><MarketAccessGap /><Ecosystem /><ValueCreation /><DemandSection /><RegionalFlavours /><BuyerChannels /><MarketReadyPath /><Roadmap /><PilotSection /><Phases /><section className="ma-section section-dark ma-final"><div><p className="eyebrow">12 · THE NEXT CHAPTER</p><h2 className="serif">The pilot creates the proof.<br /><em>The model creates scale.</em></h2><p>From regional producers to market-ready enterprises, Desi Barni is building pathways to buyers across India and beyond.</p><div className="ma-final-actions"><button className="button" onClick={onExplore}>Explore our pickles <ArrowRight size={16} /></button><a className="button button-secondary" href="#journey">Our journey <ArrowRight size={16} /></a></div></div><div className="ma-final-mark"><span>देस</span><small>FROM LOCAL<br />TO NATIONAL</small></div></section></main>;
+  return (
+    <main className="market-access">
+      <MarketAccessHero onExplore={onExplore} />
+      <MarketAccessGap />
+      <MarketAccessInquiryForm />
+      <Ecosystem />
+      <ValueCreation />
+      <DemandSection />
+      <RegionalFlavours />
+      <BuyerChannels />
+      <MarketReadyPath />
+      <Roadmap />
+      <PilotSection />
+      <Phases />
+      <section className="ma-section section-dark ma-final">
+        <div>
+          <p className="eyebrow">12 · THE NEXT CHAPTER</p>
+          <h2 className="serif">
+            The pilot creates the proof.
+            <br />
+            <em>The model creates scale.</em>
+          </h2>
+          <p>From regional producers to market-ready enterprises, Desi Barni is building pathways to buyers across India and beyond.</p>
+          <div className="ma-final-actions">
+            <button className="button" onClick={onExplore}>Explore our pickles <ArrowRight size={16} /></button>
+            <a className="button button-secondary" href="#partner-form">Partner with us <ArrowRight size={16} /></a>
+          </div>
+        </div>
+        <div className="ma-final-mark">
+          <span>देस</span>
+          <small>FROM LOCAL<br />TO NATIONAL</small>
+        </div>
+      </section>
+    </main>
+  );
 }
