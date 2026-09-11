@@ -157,9 +157,9 @@ export default function RegionsPage({
       {/* Hero Header Banner */}
       <section className="section-dark noise" style={{ padding: '80px 40px 60px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <p className="eyebrow reveal" style={{ color: '#d99124', letterSpacing: '2px' }}>
+          {/* <p className="eyebrow reveal" style={{ color: '#d99124', letterSpacing: '2px' }}>
             REGIONAL FLAVOUR MAP OF INDIA
-          </p>
+          </p> */}
           <h1 className="serif reveal delay-1" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', lineHeight: 1.15, margin: '16px 0 20px' }}>
             Taste the Map of India.<br />
             <em style={{ fontStyle: 'italic', fontWeight: 400, opacity: 0.9 }}>Five culinary zones. Hundreds of traditions.</em>
