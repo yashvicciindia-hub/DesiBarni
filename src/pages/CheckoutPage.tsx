@@ -1,33 +1,45 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Check } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
-import Button from '@/components/Button';
+import { buildGoogleFormPrefillUrl } from '@/config/googleForm';
 
 export default function CheckoutPage() {
-  const { items, subtotal, clearCart } = useCart();
-  const [submitted, setSubmitted] = useState(false);
-  const navigate = useNavigate();
+  const { items, subtotal } = useCart();
 
-  if (submitted) {
-    return (
-      <main className="success-page section">
-        <div className="success-mark">
-          <Check />
-        </div>
-        <p className="eyebrow">ORDER NOTE RECEIVED</p>
-        <h1 className="serif">
-          Your Barni is
-          <br />
-          <em>being imagined.</em>
-        </h1>
-        <p>
-          This is a demo checkout experience. Your order details were captured locally, ready for a real payment and fulfilment connection.
-        </p>
-        <Button onClick={() => navigate('/pickles')}>Continue exploring</Button>
-      </main>
-    );
-  }
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    const name = String(formData.get('name') || '').trim();
+    const phone = String(formData.get('phone') || '').trim();
+    const email = String(formData.get('email') || '').trim();
+    const address = String(formData.get('address') || '').trim();
+    const city = String(formData.get('city') || '').trim();
+    const state = String(formData.get('state') || '').trim();
+    const pincode = String(formData.get('pincode') || '').trim();
+
+    // Format readable order summary: "Ginger Pickle x 2, Mango Pickle x 1"
+    const orderSummary =
+      items.length > 0
+        ? items.map(({ product, quantity }) => `${product.name} x ${quantity}`).join(', ')
+        : 'No items';
+
+    const total = `₹${subtotal}`;
+
+    const prefillUrl = buildGoogleFormPrefillUrl({
+      name,
+      phone,
+      email,
+      address,
+      city,
+      state,
+      pincode,
+      orderSummary,
+      total,
+    });
+
+    window.open(prefillUrl, '_blank', 'noopener,noreferrer');
+  };
 
   return (
     <main className="checkout section">
@@ -40,42 +52,36 @@ export default function CheckoutPage() {
         </h1>
       </div>
       <div className="checkout-layout">
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            setSubmitted(true);
-            clearCart();
-          }}
-        >
+        <form onSubmit={handleSubmit}>
           <p className="eyebrow">DELIVERY DETAILS</p>
           <div className="form-grid">
             <label>
               Name
-              <input required placeholder="Your full name" />
+              <input name="name" required placeholder="Your full name" />
             </label>
             <label>
               Phone
-              <input required placeholder="+91" />
+              <input name="phone" required placeholder="+91" />
             </label>
             <label>
               Email
-              <input required type="email" placeholder="you@example.com" />
+              <input name="email" required type="email" placeholder="you@example.com" />
             </label>
             <label>
               Address
-              <input required placeholder="House, street, area" />
+              <input name="address" required placeholder="House, street, area" />
             </label>
             <label>
               City
-              <input required placeholder="City" />
+              <input name="city" required placeholder="City" />
             </label>
             <label>
               State
-              <input required placeholder="State" />
+              <input name="state" required placeholder="State" />
             </label>
             <label>
               Pincode
-              <input required inputMode="numeric" placeholder="000000" />
+              <input name="pincode" required inputMode="numeric" placeholder="000000" />
             </label>
           </div>
           <button className="button" type="submit">

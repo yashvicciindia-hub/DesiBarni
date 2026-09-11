@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ArrowDown, ArrowRight, ArrowUpRight, Check, Circle, Factory, Globe2, PackageCheck, Send, ShoppingBag, Store, Utensils } from 'lucide-react';
 import { products } from '@/data/products';
+import { buildProducerPrefillUrl, buildBuyerPrefillUrl } from '@/config/marketAccessForms';
 
 type MarketAccessProps = { onExplore: () => void };
 
@@ -171,8 +172,55 @@ function MarketAccessInquiryForm() {
   const [role, setRole] = useState<'producer' | 'buyer'>('producer');
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    if (role === 'producer') {
+      const contactName = String(formData.get('contactName') || '');
+      const brandName = String(formData.get('brandName') || '');
+      const phone = String(formData.get('phone') || '');
+      const email = String(formData.get('email') || '');
+      const region = String(formData.get('region') || '');
+      const productionScale = String(formData.get('productionScale') || '');
+      const pickleVarieties = String(formData.get('pickleVarieties') || '');
+      const supportNeeded = String(formData.get('supportNeeded') || '');
+
+      const prefilledUrl = buildProducerPrefillUrl({
+        contactName,
+        brandName,
+        phone,
+        email,
+        region,
+        productionScale,
+        pickleVarieties,
+        supportNeeded,
+      });
+
+      window.open(prefilledUrl, '_blank', 'noopener,noreferrer');
+    } else {
+      const companyName = String(formData.get('companyName') || '');
+      const contactName = String(formData.get('contactName') || '');
+      const phone = String(formData.get('phone') || '');
+      const email = String(formData.get('email') || '');
+      const buyerCategory = String(formData.get('buyerCategory') || '');
+      const monthlyVolume = String(formData.get('monthlyVolume') || '');
+      const specifications = String(formData.get('specifications') || '');
+
+      const prefilledUrl = buildBuyerPrefillUrl({
+        companyName,
+        contactName,
+        phone,
+        email,
+        buyerCategory,
+        monthlyVolume,
+        specifications,
+      });
+
+      window.open(prefilledUrl, '_blank', 'noopener,noreferrer');
+    }
+
     setSubmitted(true);
   };
 
@@ -255,27 +303,27 @@ function MarketAccessInquiryForm() {
                 <div className="ma-form-grid">
                   <div className="ma-field-group">
                     <label htmlFor="producer-name">Contact Person Name *</label>
-                    <input id="producer-name" required placeholder="e.g. Radhika Sharma" />
+                    <input id="producer-name" name="contactName" required placeholder="e.g. Radhika Sharma" />
                   </div>
 
                   <div className="ma-field-group">
                     <label htmlFor="producer-brand">Brand / Kitchen Name *</label>
-                    <input id="producer-brand" required placeholder="e.g. Shahi Avakaya Kitchens" />
+                    <input id="producer-brand" name="brandName" required placeholder="e.g. Shahi Avakaya Kitchens" />
                   </div>
 
                   <div className="ma-field-group">
                     <label htmlFor="producer-phone">Phone Number (+91) *</label>
-                    <input id="producer-phone" required placeholder="+91 98765 43210" />
+                    <input id="producer-phone" name="phone" required placeholder="+91 98765 43210" />
                   </div>
 
                   <div className="ma-field-group">
                     <label htmlFor="producer-email">Email Address *</label>
-                    <input id="producer-email" required type="email" placeholder="producer@example.com" />
+                    <input id="producer-email" name="email" required type="email" placeholder="producer@example.com" />
                   </div>
 
                   <div className="ma-field-group">
                     <label htmlFor="producer-region">Region / State *</label>
-                    <select id="producer-region" required>
+                    <select id="producer-region" name="region" required>
                       <option value="">Select your region</option>
                       <option value="North">North India (Punjab, UP, Haryana)</option>
                       <option value="West">West India (Gujarat, Maharashtra)</option>
@@ -287,7 +335,7 @@ function MarketAccessInquiryForm() {
 
                   <div className="ma-field-group">
                     <label htmlFor="producer-scale">Production Scale *</label>
-                    <select id="producer-scale" required>
+                    <select id="producer-scale" name="productionScale" required>
                       <option value="">Select your enterprise type</option>
                       <option value="Home Kitchen">Home Kitchen / Micro Producer</option>
                       <option value="Women SHG">Women Self-Help Group (SHG)</option>
@@ -298,12 +346,12 @@ function MarketAccessInquiryForm() {
 
                   <div className="ma-field-group full-width">
                     <label htmlFor="producer-items">Pickle Varieties Produced</label>
-                    <input id="producer-items" placeholder="e.g. Raw Mango, Garlic, Green Chilli, Lime, Mixed Veg" />
+                    <input id="producer-items" name="pickleVarieties" placeholder="e.g. Raw Mango, Garlic, Green Chilli, Lime, Mixed Veg" />
                   </div>
 
                   <div className="ma-field-group full-width">
                     <label htmlFor="producer-support">Primary Support Needed</label>
-                    <select id="producer-support">
+                    <select id="producer-support" name="supportNeeded">
                       <option value="Market Access">Connecting with Commercial Buyers & Distributors</option>
                       <option value="Packaging">Retail Packaging & Brand Specification</option>
                       <option value="Compliance">FSSAI, GST & Food Safety Documentation</option>
@@ -326,27 +374,27 @@ function MarketAccessInquiryForm() {
                 <div className="ma-form-grid">
                   <div className="ma-field-group">
                     <label htmlFor="buyer-company">Company / Enterprise Name *</label>
-                    <input id="buyer-company" required placeholder="e.g. Grand Heritage Hotels / Spice Bazaar" />
+                    <input id="buyer-company" name="companyName" required placeholder="e.g. Grand Heritage Hotels / Spice Bazaar" />
                   </div>
 
                   <div className="ma-field-group">
                     <label htmlFor="buyer-person">Sourcing Manager / Contact Name *</label>
-                    <input id="buyer-person" required placeholder="e.g. Vikram Verma" />
+                    <input id="buyer-person" name="contactName" required placeholder="e.g. Vikram Verma" />
                   </div>
 
                   <div className="ma-field-group">
                     <label htmlFor="buyer-phone">Phone Number *</label>
-                    <input id="buyer-phone" required placeholder="+91 98765 43210" />
+                    <input id="buyer-phone" name="phone" required placeholder="+91 98765 43210" />
                   </div>
 
                   <div className="ma-field-group">
                     <label htmlFor="buyer-email">Work Email *</label>
-                    <input id="buyer-email" required type="email" placeholder="sourcing@company.com" />
+                    <input id="buyer-email" name="email" required type="email" placeholder="sourcing@company.com" />
                   </div>
 
                   <div className="ma-field-group">
                     <label htmlFor="buyer-type">Buyer Category *</label>
-                    <select id="buyer-type" required>
+                    <select id="buyer-type" name="buyerCategory" required>
                       <option value="">Select business category</option>
                       <option value="Retail">Organized Retail / Supermarket Chain</option>
                       <option value="Hospitality">Hotels, Restaurants & Catering (B2B)</option>
@@ -359,7 +407,7 @@ function MarketAccessInquiryForm() {
 
                   <div className="ma-field-group">
                     <label htmlFor="buyer-volume">Estimated Monthly Volume *</label>
-                    <select id="buyer-volume" required>
+                    <select id="buyer-volume" name="monthlyVolume" required>
                       <option value="">Select volume scale</option>
                       <option value="Trial">Trial Order (50 - 200 jars)</option>
                       <option value="Medium">Medium Volume (200 - 1,000 jars/month)</option>
@@ -370,7 +418,7 @@ function MarketAccessInquiryForm() {
 
                   <div className="ma-field-group full-width">
                     <label htmlFor="buyer-details">Regional Flavours or Specifications Desired</label>
-                    <textarea id="buyer-details" rows={3} placeholder="Describe specific regional taste profiles, custom labeling, or packaging preferences..." />
+                    <textarea id="buyer-details" name="specifications" rows={3} placeholder="Describe specific regional taste profiles, custom labeling, or packaging preferences..." />
                   </div>
                 </div>
               </>
