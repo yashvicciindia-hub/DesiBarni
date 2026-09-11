@@ -186,6 +186,8 @@ function MarketAccessInquiryForm() {
       const productionScale = String(formData.get('productionScale') || '');
       const pickleVarieties = String(formData.get('pickleVarieties') || '');
       const supportNeeded = String(formData.get('supportNeeded') || '');
+      const monthlyProduction = String(formData.get('monthlyProduction') || '');
+      const consent = String(formData.get('consent') || '');
 
       const prefilledUrl = buildProducerPrefillUrl({
         contactName,
@@ -196,26 +198,36 @@ function MarketAccessInquiryForm() {
         productionScale,
         pickleVarieties,
         supportNeeded,
+        monthlyProduction,
+        consent,
       });
 
       window.open(prefilledUrl, '_blank', 'noopener,noreferrer');
     } else {
       const companyName = String(formData.get('companyName') || '');
-      const contactName = String(formData.get('contactName') || '');
+      const sourcingManager = String(formData.get('sourcingManager') || formData.get('contactName') || '');
       const phone = String(formData.get('phone') || '');
       const email = String(formData.get('email') || '');
       const buyerCategory = String(formData.get('buyerCategory') || '');
-      const monthlyVolume = String(formData.get('monthlyVolume') || '');
-      const specifications = String(formData.get('specifications') || '');
+      const estimatedMonthlyVolume = String(formData.get('estimatedMonthlyVolume') || formData.get('monthlyVolume') || '');
+      const regionalFlavours = String(formData.get('regionalFlavours') || '');
+      const pickleSpecification = String(formData.get('pickleSpecification') || formData.get('specifications') || '');
+      const packagingPreference = String(formData.get('packagingPreference') || '');
+      const deliveryRequirements = String(formData.get('deliveryRequirements') || '');
+      const consent = String(formData.get('consent') || '');
 
       const prefilledUrl = buildBuyerPrefillUrl({
         companyName,
-        contactName,
+        sourcingManager,
         phone,
         email,
         buyerCategory,
-        monthlyVolume,
-        specifications,
+        estimatedMonthlyVolume,
+        regionalFlavours,
+        pickleSpecification,
+        packagingPreference,
+        deliveryRequirements,
+        consent,
       });
 
       window.open(prefilledUrl, '_blank', 'noopener,noreferrer');

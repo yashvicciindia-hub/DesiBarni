@@ -1,6 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
-import { buildGoogleFormPrefillUrl } from '@/config/googleForm';
+import { ORDER_FORM, buildGoogleFormPrefillUrl } from '@/config/googleForm';
 
 export default function CheckoutPage() {
   const { items, subtotal } = useCart();
@@ -18,13 +18,10 @@ export default function CheckoutPage() {
     const state = String(formData.get('state') || '').trim();
     const pincode = String(formData.get('pincode') || '').trim();
 
-    // Format readable order summary: "Ginger Pickle x 2, Mango Pickle x 1"
-    const orderSummary =
-      items.length > 0
-        ? items.map(({ product, quantity }) => `${product.name} x ${quantity}`).join(', ')
-        : 'No items';
-
-    const total = `₹${subtotal}`;
+    // Required fields validation
+    if (!name || !phone || !address || !city || !state || !pincode) {
+      return;
+    }
 
     const prefillUrl = buildGoogleFormPrefillUrl({
       name,
@@ -34,8 +31,6 @@ export default function CheckoutPage() {
       city,
       state,
       pincode,
-      orderSummary,
-      total,
     });
 
     window.open(prefillUrl, '_blank', 'noopener,noreferrer');
