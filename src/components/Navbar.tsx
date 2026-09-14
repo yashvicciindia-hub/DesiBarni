@@ -8,7 +8,13 @@ type Theme = 'light' | 'dark';
 export function Logo({ compact = false }: { compact?: boolean }) {
   return (
     <Link to="/" className={`brand-mark ${compact ? 'compact' : ''}`} aria-label="Desi Barni home">
-      <img src="/images/logo/Desi_barni.jpeg" alt="Desi Barni" />
+      <span className="brand-jar" aria-hidden="true">
+        <img src="/images/logo/Desi_barni.jpeg" alt="" />
+      </span>
+      <span className="brand-text" aria-hidden="true">
+        <strong>Desi</strong>
+        <span>बरनी</span>
+      </span>
     </Link>
   );
 }

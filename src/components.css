@@ -149,42 +149,101 @@ em {
 }
 
 .brand-mark {
-    display: block;
-    width: 64px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    width: max-content;
     height: 64px;
     overflow: visible;
     flex-shrink: 0;
+    text-decoration: none;
 }
 
-.brand-mark img {
-    width: 100%;
-    height: 100%;
+.brand-jar {
+    display: block;
+    width: 44px;
+    height: 56px;
+    overflow: hidden;
+    position: relative;
+    flex: 0 0 auto;
+}
+
+.brand-jar img {
+    display: block;
+    width: 96px;
+    height: 96px;
+    max-width: none;
     object-fit: contain;
-    object-position: center;
+    object-position: top center;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
     mix-blend-mode: screen;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: .83;
+    white-space: nowrap;
+}
+
+.brand-text strong {
+    color: #f4e6c8;
+    font: 600 25px/1 'Playfair Display', serif;
+    letter-spacing: -.05em;
+}
+
+.brand-text span {
+    color: #d99124;
+    font: 600 21px/1.05 'Noto Serif Devanagari', 'Nirmala UI', serif;
 }
 
 .light-page .brand-mark {
     background: transparent;
 }
 
-.light-page .brand-mark img {
+.light-page .brand-text strong {
+    color: #211e18;
+}
+
+.light-page .brand-jar img {
     mix-blend-mode: multiply;
     filter: invert(1) hue-rotate(180deg);
     opacity: 1;
 }
 
-.dark-page .brand-mark img,
-.footer .brand-mark img,
-.regions-page .navbar .brand-mark img {
+.dark-page .brand-jar img,
+.footer .brand-jar img,
+.regions-page .navbar .brand-jar img {
     mix-blend-mode: screen;
     filter: none;
     opacity: 1;
 }
 
 .brand-mark.compact {
-    width: 56px;
     height: 56px;
+    gap: 8px;
+}
+
+.brand-mark.compact .brand-jar {
+    width: 38px;
+    height: 49px;
+}
+
+.brand-mark.compact .brand-jar img {
+    width: 84px;
+    height: 84px;
+}
+
+.brand-mark.compact .brand-text strong {
+    font-size: 21px;
+}
+
+.brand-mark.compact .brand-text span {
+    font-size: 18px;
 }
 
 .desktop-nav {
@@ -2123,7 +2182,6 @@ em {
     }
 
     .brand-mark.compact {
-        width: 50px;
         height: 50px;
     }
 
@@ -2593,12 +2651,12 @@ em {
     color: #d99124;
 }
 
-.brand-mark img {
+.brand-jar img {
     transition: transform .3s ease;
 }
 
-.brand-mark:hover img {
-    transform: scale(1.05);
+.brand-mark:hover .brand-jar img {
+    transform: translateX(-50%) scale(1.05);
 }
 
 .product-card {
