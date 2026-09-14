@@ -23,8 +23,7 @@ type Theme = 'light' | 'dark';
 function AppContent() {
   const [theme, setTheme] = useState<Theme>(
     () =>
-      (localStorage.getItem('desi-barni-theme') as Theme) ||
-      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+      (localStorage.getItem('desi-barni-theme') as Theme) || 'light'
   );
   const [cartOpen, setCartOpen] = useState(false);
   const [quick, setQuick] = useState<Product | null>(null);
