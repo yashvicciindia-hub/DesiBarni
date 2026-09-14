@@ -7,14 +7,22 @@ import ProductCard from '@/components/ProductCard';
 import Button from '@/components/Button';
 import { useReveal } from '@/hooks/useReveal';
 
-type Region = { name: string; detail: string; pickles: string; tone: string };
+type Region = {
+  name: string;
+  state: string;
+  detail: string;
+  pickles: string;
+  tone: string;
+  image: string;
+  fallbackImage: string;
+};
 
 const regions: Region[] = [
-  { name: 'NORTH', detail: 'Bold, oil-rich and familiar.', pickles: 'Punjabi Mango · Mixed Vegetable', tone: '#b83a2f' },
-  { name: 'WEST', detail: 'Sweet-spicy with urban appeal.', pickles: 'Gujarati Chundo · Maharashtrian Pickles', tone: '#d99124' },
-  { name: 'SOUTH', detail: 'Intensely flavoured and fragrant.', pickles: 'Andhra Avakaya · Kerala Pickles · Appemidi', tone: '#66752a' },
-  { name: 'EAST', detail: 'Distinctive regional mango and chilli traditions.', pickles: 'Mango · Chilli Pickles', tone: '#a86b35' },
-  { name: 'NORTHEAST', detail: 'Unique, bright and specialty-friendly.', pickles: 'Bamboo Shoot · Regional Chilli Pickles', tone: '#8b6d4b' },
+  { name: 'NORTH', state: 'Punjab', detail: 'Bold, oil-rich and familiar.', pickles: 'Punjabi Mango · Mixed Vegetable', tone: '#b83a2f', image: '/images/logo/north.png', fallbackImage: '/images/logo/MangoPickle.png' },
+  { name: 'WEST', state: 'Gujarat', detail: 'Sweet-spicy with urban appeal.', pickles: 'Gujarati Chundo · Maharashtrian Pickles', tone: '#d99124', image: '/images/logo/west.png', fallbackImage: '/images/logo/GreenChilli.png' },
+  { name: 'SOUTH', state: 'Tamil Nadu', detail: 'Intensely flavoured and fragrant.', pickles: 'Andhra Avakaya · Kerala Pickles · Appemidi', tone: '#66752a', image: '/images/logo/south.png', fallbackImage: '/images/logo/GarlicPickle.png' },
+  { name: 'EAST', state: 'West Bengal', detail: 'Distinctive regional mango and chilli traditions.', pickles: 'Mango · Chilli Pickles', tone: '#a86b35', image: '/images/logo/east.png', fallbackImage: '/images/logo/LimePickle.png' },
+  { name: 'NORTHEAST', state: 'Assam', detail: 'Unique, bright and specialty-friendly.', pickles: 'Bamboo Shoot · Regional Chilli Pickles', tone: '#8b6d4b', image: '/images/logo/northeast.png', fallbackImage: '/images/logo/RedChilli.png' },
 ];
 
 const stages = ['PREPARE', 'PACKAGE', 'CONNECT', 'POSITION', 'REPEAT', 'SCALE'];
@@ -174,25 +182,25 @@ export default function HomePage({
             <h2 className="serif">
               Taste the
               <br />
-              <em>map of India.</em>
+              <em>flavours of India.</em>
             </h2>
           </div>
           <p className="regions-note">The best pickle is often the one that takes you somewhere.</p>
         </div>
         <div className="region-layout">
-          <div className="india-shape">
-            <div className="india-outline">
-              <span>INDIA</span>
-              <i className="map-dot dot-1" />
-              <i className="map-dot dot-2" />
-              <i className="map-dot dot-3" />
-              <i className="map-dot dot-4" />
+          <div className="region-visual" key={region.name}>
+            <img
+              className="region-pickle-image"
+              src={region.image}
+              alt={`${region.pickles} from ${region.state}`}
+              onError={(event) => {
+                event.currentTarget.src = region.fallbackImage;
+              }}
+            />
+            <div className="region-visual-copy">
+              <span className="eyebrow">{region.name} · {region.state}</span>
+              <strong className="serif">{region.pickles.split(' · ')[0]}</strong>
             </div>
-            <span className="map-caption">
-              A COUNTRY OF
-              <br />
-              MANY TABLES
-            </span>
           </div>
           <div className="region-list">
             {regions.map((item) => (
@@ -200,6 +208,8 @@ export default function HomePage({
                 key={item.name}
                 className={`region-row ${region.name === item.name ? 'active' : ''}`}
                 onClick={() => setRegion(item)}
+                aria-label={`Show ${item.name.toLowerCase()} regional flavours`}
+                aria-pressed={region.name === item.name}
               >
                 <span>{item.name}</span>
                 <strong>{item.detail}</strong>

@@ -877,68 +877,45 @@ em {
     align-items: center;
 }
 
-.india-shape {
-    height: 480px;
-    display: grid;
-    place-items: center;
+.region-visual {
+    width: min(100%, 360px);
+    min-height: 480px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
     position: relative;
+    animation: regional-visual-in .45s ease both;
 }
 
-.india-outline {
-    width: 250px;
-    height: 390px;
-    clip-path: polygon(39% 0, 61% 7%, 69% 21%, 81% 29%, 71% 39%, 78% 48%, 67% 58%, 71% 68%, 57% 78%, 51% 100%, 42% 83%, 31% 76%, 34% 62%, 24% 55%, 32% 42%, 22% 31%, 33% 20%);
-    background: #66752a;
+.region-pickle-image {
+    display: block;
+    width: min(100%, 330px);
+    height: 350px;
+    flex: 0 1 auto;
+    object-fit: contain;
+    filter: drop-shadow(0 18px 15px rgba(0, 0, 0, .35));
+    animation: regional-pickle-in .55s .08s ease both;
+}
+
+.region-visual-copy {
     display: grid;
-    place-items: center;
-    position: relative;
-    box-shadow: 20px 20px 0 rgba(217, 145, 36, .16);
-}
-
-.india-outline span {
-    color: #f4e6c8;
-    letter-spacing: .25em;
-    font-size: 12px;
-    transform: rotate(13deg);
-}
-
-.map-dot {
-    width: 12px;
-    height: 12px;
-    background: #d99124;
-    border-radius: 50%;
-    position: absolute;
-    border: 3px solid #f4e6c8;
-}
-
-.dot-1 {
-    top: 32%;
-    left: 34%;
-}
-
-.dot-2 {
-    top: 53%;
-    left: 59%;
-}
-
-.dot-3 {
-    top: 65%;
-    left: 45%;
-}
-
-.dot-4 {
-    top: 78%;
-    left: 52%;
-}
-
-.map-caption {
-    position: absolute;
-    bottom: 10px;
+    gap: 5px;
+    width: 100%;
     text-align: center;
-    color: #9f8e6f;
-    letter-spacing: .17em;
+}
+
+.region-visual-copy .eyebrow {
+    margin: 0;
+    color: #d99124;
     font-size: 9px;
-    line-height: 1.5;
+}
+
+.region-visual-copy strong {
+    color: #f4e6c8;
+    font-size: 23px;
+    max-width: 100%;
 }
 
 .region-list {
@@ -2317,12 +2294,13 @@ em {
         gap: 30px;
     }
 
-    .india-shape {
-        height: 330px;
+    .region-visual {
+        min-height: 390px;
     }
 
-    .india-outline {
-        transform: scale(.75);
+    .region-pickle-image {
+        width: min(100%, 280px);
+        height: 285px;
     }
 
     .region-row {
@@ -4425,4 +4403,14 @@ em {
     margin: 0 auto 24px;
     opacity: 0.85;
     line-height: 1.6;
+}
+
+@keyframes regional-visual-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes regional-pickle-in {
+    from { opacity: 0; transform: scale(.9) translateY(12px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
 }
