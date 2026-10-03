@@ -9,6 +9,7 @@ import CartDrawer from '@/components/CartDrawer';
 import QuickView from '@/components/QuickView';
 import ScrollToTop from '@/components/ScrollToTop';
 import DesiBarniChatbot from '@/components/Chatbot/DesiBarniChatbot';
+import AppDownloadCTA from '@/components/AppDownloadCTA';
 
 import HomePage from '@/pages/HomePage';
 import PicklesPage from '@/pages/PicklesPage';
@@ -67,6 +68,7 @@ function AppContent() {
 
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
       <QuickView product={quick} onClose={() => setQuick(null)} onAdded={added} />
+      <AppDownloadCTA />
       <DesiBarniChatbot />
 
       {toast && (
